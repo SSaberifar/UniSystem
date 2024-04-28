@@ -1,31 +1,36 @@
-import java.util.regex.Pattern;
-
 public class Student extends Person {
 
-    private String studyfield;
+    private String major;
     private String educationalID;
 
-    // Constructor
+    public Student(String fisrtname, String lastname, String username, String email, String phonenumber, String role, String pass, String studyfield, String educationalID) {
+        super(fisrtname, lastname, username, email, phonenumber, role, pass);
+        this.major = studyfield;
+        this.educationalID = educationalID;
+    }
 
-    // Methods
+    public String getStudyfield() {
+        return major;
+    }
 
+    public String getEducationalID() {
+        return educationalID;
+    }
 
-    // Setter And Getter
-    public void setStudyfield( String studyfield ) {
-        if ( studyfield.length() <= 18 && super.isvalidstring( studyfield )) {
-            this.studyfield = studyfield;
+    public void setStudyfield(String studyfield) {
+        if (super.isValidString(studyfield)) {
+            this.major = studyfield;
         } else {
-            System.out.println("Study field not valid");
-            setStudyfield( input.next() );
+            System.out.println("Study field is not valid");
         }
     }
 
-    public void setEducationalID( String educationalID) {
-        if ( super.isvalidpass( educationalID )) {
+    public void setEducationalID(String educationalID) {
+        if (super.isValidId(educationalID, getRole())) {
             this.educationalID = educationalID;
         } else {
-            System.out.println(" Educational ID not valid");
-            setStudyfield( input.next() );
+            System.out.println(" EducationalID is not valid");
         }
     }
+
 }

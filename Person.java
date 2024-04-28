@@ -1,55 +1,133 @@
-import java.util.Scanner;
 import java.util.regex.Pattern;
 
 public class Person {
+    private String fisrtname;
+    private String lastname;
+    private String username;
+    private String email;
+    private String phonenumber;
+    private String role;
+    private String pass;
 
-    Scanner input= new Scanner(System.in);
-
-    // Attribute
-    protected String fisrtname;
-    protected String lastname;
-    protected String username;
-    protected String email;
-    protected String phonenumber;
-    protected Person owner;
-    protected String pass;
-    protected String repass;
-
-    // Constructor
-
-    // Methods
-    protected boolean isvalidstring( String input) {
-        return Pattern.matches("^[a-zA-Z]+$",input);
-    }
-    protected boolean isvalidpass( String pass) {
-        return Pattern.matches("^[a-zA-Z0-9]+$",pass);
+    public Person(String fisrtname, String lastname, String username, String email, String phonenumber, String role, String pass) {
+        this.setFisrtname(fisrtname);
+        this.setLastname(lastname);
+        this.setUsername(username);
+        this.setEmail(email);
+        this.setPhonenumber(phonenumber);
+        this.setRole(role);
+        this.setPass(pass);
     }
 
-    // Setter And Getter
+    public boolean isValidString(String input) {
+        return Pattern.matches("^[a-zA-Z]{1,18}$\n", input);
+    }
+
+    public boolean isValidPass(String pass) {
+        return Pattern.matches("^[A-Za-z0-9]{8,12}$\n", pass);
+    }
+
+    public boolean isValidUserName(String username) {
+        return Pattern.matches("^[A-Za-z0-9]{5,12}$\n", username);
+    }
+
+    public boolean isValidEmail(String email) {
+        return Pattern.matches("^[a-zA-Z0-9._%+-]{1,18}@[a-z.-]{1,8}\\.[a-z]{1,4}$\n", email);
+    }
+
+    public boolean isValidId(String id, String role) {
+        if (role.equals("student")) {
+            return Pattern.matches("^[0-9]{6}$", id);
+        } else if (role.equals("teacher")) {
+            return Pattern.matches("^[0-9]{10}$", id);
+        } else if (role.equals("official")) {
+            return Pattern.matches("^[0-9]{4}$", id);
+        }
+        return false;
+    }
+
+    public boolean isValidPhone(String phone) {
+        return Pattern.matches("^09\\d{9}$\n", phone);
+    }
+
+
     public void setFisrtname(String fn) {
-        if ( fn.length() <= 18 && isvalidstring( fn )) {
+        if (isValidString(fn)) {
             this.fisrtname = fn;
         } else {
-            System.out.println("First name not valid");
-            setFisrtname( input.next() );
+            System.out.println("First name is not valid");
         }
     }
 
     public void setLastname(String ln) {
-        if ( ln.length() <= 18 && isvalidstring( ln )) {
+        if (isValidString(ln)) {
             this.lastname = ln;
         } else {
-            System.out.println("Last name not valid");
-            setLastname( input.next() );
+            System.out.println("Last name is not valid");
         }
     }
 
-    public void setUsername( String username) {
-        if ( !username.isEmpty() && isvalidpass( username)) {
+    public void setUsername(String username) {
+        if (isValidUserName(username)) {
             this.username = username;
         } else {
-            System.out.println("Username not valid ");
-            setUsername( input.next() );
+            System.out.println("Username is not valid ");
+        }
+    }
+
+    public String getFisrtname() {
+        return fisrtname;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        if (isValidEmail(email)) {
+            this.email = email;
+        } else {
+            System.out.println("email is not valid");
+        }
+    }
+
+    public String getPhonenumber() {
+        return phonenumber;
+    }
+
+    public void setPhonenumber(String phonenumber) {
+        if (isValidPhone(phonenumber)) {
+            this.phonenumber = phonenumber;
+        } else {
+            System.out.println("phone number is not valid");
+        }
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public String getPass() {
+        return pass;
+    }
+
+    public void setPass(String pass) {
+        if (isValidPass(pass)) {
+            this.pass = pass;
+        } else {
+            System.out.println("pass is not valid");
         }
     }
 
