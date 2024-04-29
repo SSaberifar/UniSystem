@@ -18,4 +18,14 @@ public class Teacher extends Person {
         }
     }
 
+    @Override
+    public boolean equals(Object obj ) {
+        return obj instanceof Teacher;
+    }
+
+    @Override
+    public  String toString() {
+        return "TeacherId : " + this.educationalCode;
+    }
+
 }

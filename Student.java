@@ -33,4 +33,14 @@ public class Student extends Person {
         }
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Student;
+    }
+
+    @Override
+    public String toString() {
+        return "StudentId : "+this.educationalID;
+    }
+
 }

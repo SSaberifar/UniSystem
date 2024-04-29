@@ -17,4 +17,14 @@ public class Official extends Person {
             System.out.println(" EducationalCode id not valid");
         }
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Official;
+    }
+
+    @Override
+    public String toString() {
+        return "OfficialID : "+ this.educationalCode;
+    }
 }
