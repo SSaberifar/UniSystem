@@ -20,19 +20,7 @@ public class Person {
     }
 
     public boolean isValidString(String input) {
-        return Pattern.matches("^[a-zA-Z]{1,18}$\n", input);
-    }
-
-    public boolean isValidPass(String pass) {
-        return Pattern.matches("^[A-Za-z0-9]{8,12}$\n", pass);
-    }
-
-    public boolean isValidUserName(String username) {
-        return Pattern.matches("^[A-Za-z0-9]{5,12}$\n", username);
-    }
-
-    public boolean isValidEmail(String email) {
-        return Pattern.matches("^[a-zA-Z0-9._%+-]{1,18}@[a-z.-]{1,8}\\.[a-z]{1,4}$\n", email);
+        return Pattern.matches("^[a-zA-Z]{1,18}$", input);
     }
 
     public boolean isValidId(String id, String role) {
@@ -46,15 +34,11 @@ public class Person {
         return false;
     }
 
-    public boolean isValidPhone(String phone) {
-        return Pattern.matches("^09\\d{9}$\n", phone);
-    }
-
 
     public void setFisrtname(String fn) {
         if (isValidString(fn)) {
             this.fisrtname = fn;
-        } else {
+        }else {
             System.out.println("First name is not valid");
         }
     }
@@ -68,7 +52,7 @@ public class Person {
     }
 
     public void setUsername(String username) {
-        if (isValidUserName(username)) {
+        if (Pattern.matches("^[A-Za-z0-9]{5,12}$", username)) {
             this.username = username;
         } else {
             System.out.println("Username is not valid ");
@@ -92,7 +76,7 @@ public class Person {
     }
 
     public void setEmail(String email) {
-        if (isValidEmail(email)) {
+        if (Pattern.matches("^[a-zA-Z0-9._%+-]{1,18}@[a-z.-]{1,8}\\.[a-z]{1,4}$", email)) {
             this.email = email;
         } else {
             System.out.println("email is not valid");
@@ -104,7 +88,7 @@ public class Person {
     }
 
     public void setPhonenumber(String phonenumber) {
-        if (isValidPhone(phonenumber)) {
+        if (Pattern.matches("^09\\d{9}$", phonenumber)) {
             this.phonenumber = phonenumber;
         } else {
             System.out.println("phone number is not valid");
@@ -124,7 +108,7 @@ public class Person {
     }
 
     public void setPass(String pass) {
-        if (isValidPass(pass)) {
+        if (Pattern.matches("^[A-Za-z0-9]{8,12}$", pass)) {
             this.pass = pass;
         } else {
             System.out.println("pass is not valid");

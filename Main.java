@@ -30,14 +30,14 @@ public class Main {
 
     private static void SignUp() {
 
-        String fn = null;
-        String ln = null;
-        String username = null;
-        String email = null;
-        String phonenumber = null;
-        String pass = null;
-        String repass = null;
-        String educationalID = null;
+        String fn;
+        String ln;
+        String username;
+        String email;
+        String phonenumber;
+        String pass;
+        String repass;
+        String educationalID;
         do {
             System.out.println("Please enter your firstname :");
             fn= scanner.next();
@@ -55,61 +55,64 @@ public class Main {
             repass = scanner.next();
             System.out.println("Please enter your educationalID :");
             educationalID = scanner.next();
-        }while (fn.isEmpty() || ln.isEmpty() || username.isEmpty() || email.isEmpty() ||phonenumber.isEmpty() || pass.isEmpty() || repass.isEmpty() || pass != repass || educationalID.isEmpty());
+        }while (fn.isEmpty() || ln.isEmpty() || username.isEmpty() || email.isEmpty() ||phonenumber.isEmpty() || pass.isEmpty() || repass.isEmpty() || !pass.equals(repass) || educationalID.isEmpty());
 
         System.out.println("To signup please chose your role(Teacher/Student/Official):");
         String userRole = scanner.next();
-        if (userRole.equals("Student")){
-            String studyfield = null;
-            do {
-                System.out.println("Please enter your studyfield :");
-                studyfield = scanner.next();
-            }while (studyfield == null);
-            // Check if user is repetitive
-            boolean repeat = false;
-            for ( Student st : students) {
-                if (st != null && st.getEducationalID() == educationalID || st.getUsername() == username || st.getEmail() == email || st.getPhonenumber() == phonenumber) {
-                    System.out.println("this input is repetitive :");
-                    repeat = true;
-                    break;
+        switch (userRole) {
+            case "Student" -> {
+                String studyfield;
+                do {
+                    System.out.println("Please enter your studyfield :");
+                    studyfield = scanner.next();
+                } while (studyfield == null);
+                // Check if user is repetitive
+                boolean repeat = false;
+                for (Student st : students) {
+                    if (st != null && (st.getEducationalID().equals(educationalID) || st.getUsername().equals(username) || st.getEmail().equals(email) || st.getPhonenumber().equals(phonenumber))) {
+                        System.out.println("this user is repetitive :");
+                        repeat = true;
+                        break;
+                    }
                 }
-            }
-            if (!repeat) {
-                students[ currentstudents++ ] = new Student(fn,ln,username,email,phonenumber,userRole,pass,studyfield,educationalID);
-                Main.printMenu();
-            }
+                if (!repeat) {
+                    students[currentstudents++] = new Student(fn, ln, username, email, phonenumber, userRole, pass, studyfield, educationalID);
+                    Main.printMenu();
+                }
 
-        } else if (userRole.equals("Teacher")  ) {
-            // Check if user is repetitive
-            boolean repeat = false;
-            for ( Teacher te : teachers) {
-                if (te != null && te.getUsername() == username || te.getEmail() == email || te.getPhonenumber() == phonenumber) {
-                    System.out.println("this input is repetitive :");
-                    repeat =true;
-                    break;
+            }
+            case "Teacher" -> {
+                // Check if user is repetitive
+                boolean repeat = false;
+                for (Teacher te : teachers) {
+                    if (te != null && (te.getUsername().equals(username) || te.getEmail().equals(email) || te.getPhonenumber().equals(phonenumber))) {
+                        System.out.println("this user is repetitive :");
+                        repeat = true;
+                        break;
+                    }
                 }
-            }
-            if (!repeat) {
-                teachers[ currentteachers++ ] = new Teacher(fn,ln,username,email,phonenumber,userRole,pass,educationalID);
-                Main.printMenu();
-            }
+                if (!repeat) {
+                    teachers[currentteachers++] = new Teacher(fn, ln, username, email, phonenumber, userRole, pass, educationalID);
+                    Main.printMenu();
+                }
 
-        } else if (userRole.equals("Official")) {
-            // Check if user is repetitive
-            boolean repeat = false;
-            for ( Official ofi : officials) {
-                if (ofi != null && ofi.getUsername() == username || ofi.getEmail() == email || ofi.getPhonenumber() == phonenumber) {
-                    System.out.println("this input is repetitive :");
-                    repeat =true;
-                    break;
+            }
+            case "Official" -> {
+                // Check if user is repetitive
+                boolean repeat = false;
+                for (Official ofi : officials) {
+                    if (ofi != null && (ofi.getUsername().equals(username) || ofi.getEmail().equals(email) || ofi.getPhonenumber().equals(phonenumber))) {
+                        System.out.println("this user is repetitive :");
+                        repeat = true;
+                        break;
+                    }
+                }
+                if (!repeat) {
+                    officials[currentofficials++] = new Official(fn, ln, username, email, phonenumber, userRole, pass, educationalID);
+                    Main.printMenu();
                 }
             }
-            if (!repeat) {
-                officials[ currentofficials++ ] = new Official(fn,ln,username,email,phonenumber,userRole,pass,educationalID);
-                Main.printMenu();
-            }
-        } else {
-            System.out.println("Wrong User!");
+            default -> System.out.println("Wrong User!");
         }
 
 
@@ -130,7 +133,7 @@ public class Main {
                 userPass = scanner.next();
             }
             for (Student student : students) {
-                if (student.getPass() == userPass && student.getEducationalID() == userId) {
+                if (student.getPass().equals(userPass) && student.getEducationalID().equals(userId)) {
                     System.out.println("Welcome!!!");
                     Main.printMenu();
                     break;
@@ -150,7 +153,7 @@ public class Main {
                 userPass = scanner.next();
             }
             for (Teacher teacher : teachers) {
-                if (teacher.getPass() == userPass && teacher.getEducationalCode() == userCode) {
+                if (teacher.getPass().equals(userPass) && teacher.getEducationalCode().equals(userCode)) {
                     System.out.println("Welcome!!!");
                     Main.printMenu();
                     break;
