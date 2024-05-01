@@ -24,14 +24,12 @@ public class Person {
     }
 
     public boolean isValidId(String id, String role) {
-        if (role.equals("student")) {
-            return Pattern.matches("^[0-9]{6}$", id);
-        } else if (role.equals("teacher")) {
-            return Pattern.matches("^[0-9]{10}$", id);
-        } else if (role.equals("official")) {
-            return Pattern.matches("^[0-9]{4}$", id);
-        }
-        return false;
+        return switch (role) {
+            case "student" -> Pattern.matches("^[0-9]{6}$", id);
+            case "teacher" -> Pattern.matches("^[0-9]{10}$", id);
+            case "official" -> Pattern.matches("^[0-9]{4}$", id);
+            default -> false;
+        };
     }
 
 

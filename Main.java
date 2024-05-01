@@ -11,11 +11,14 @@ public class Main {
     private static int currentteachers = 0;
     private static int currentofficials = 0;
     public static void printMenu() {
-        System.out.println("Teacher/Student classes:");
-        System.out.println("Tasks(quiz,exam,exercise):");
-        System.out.println("notifications:");
-        System.out.println("user profile:");
-        System.out.println(System.currentTimeMillis());
+        System.out.println();
+        System.out.println("1- Teacher/Student classes");
+        System.out.println("2- Tasks(quiz,exam,exercise)");
+        System.out.println("3- notifications");
+        System.out.println("4- user profile");
+        System.out.println("5- home");
+        System.out.println("6- back");
+        System.out.println();
     }
 
     public static void setFunction(int number) {
@@ -77,7 +80,6 @@ public class Main {
                 }
                 if (!repeat) {
                     students[currentstudents++] = new Student(fn, ln, username, email, phonenumber, userRole, pass, studyfield, educationalID);
-                    Main.printMenu();
                 }
 
             }
@@ -93,7 +95,6 @@ public class Main {
                 }
                 if (!repeat) {
                     teachers[currentteachers++] = new Teacher(fn, ln, username, email, phonenumber, userRole, pass, educationalID);
-                    Main.printMenu();
                 }
 
             }
@@ -109,7 +110,6 @@ public class Main {
                 }
                 if (!repeat) {
                     officials[currentofficials++] = new Official(fn, ln, username, email, phonenumber, userRole, pass, educationalID);
-                    Main.printMenu();
                 }
             }
             default -> System.out.println("Wrong User!");
@@ -133,14 +133,12 @@ public class Main {
                 userPass = scanner.next();
             }
             for (Student student : students) {
-                if (student.getPass().equals(userPass) && student.getEducationalID().equals(userId)) {
-                    System.out.println("Welcome!!!");
-                    Main.printMenu();
+                if (student!=null && student.getPass().equals(userPass) && student.getEducationalID().equals(userId)) {
+                    System.out.println("Welcome " + student.getUsername());
+                    printMenu();
                     break;
                 }
             }
-            System.out.println("User not found!!!");
-            Main.printMenu();
         } else if (userRole.equals("Teacher")) {
             String userCode = null;
             while (userCode == null) {
@@ -153,13 +151,12 @@ public class Main {
                 userPass = scanner.next();
             }
             for (Teacher teacher : teachers) {
-                if (teacher.getPass().equals(userPass) && teacher.getEducationalCode().equals(userCode)) {
-                    System.out.println("Welcome!!!");
-                    Main.printMenu();
+                if (teacher!=null && teacher.getPass().equals(userPass) && teacher.getEducationalCode().equals(userCode)) {
+                    System.out.println("Welcome" + teacher.getUsername());
+                    printMenu();
                     break;
                 }
             }
-            System.out.println("User not found!!!");
         } else {
             System.out.println("Wrong User!");
         }
@@ -167,10 +164,12 @@ public class Main {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("1 - Login");
-        System.out.println("2 - SignUp");
-        System.out.println("Please enter your function number:");
-        int function = scanner.nextInt();
-        setFunction(function);
+        for(int i=0;i<3;i++){
+            System.out.println("1 - Login");
+            System.out.println("2 - SignUp");
+            System.out.println("Please enter your function number:");
+            int function = scanner.nextInt();
+            setFunction(function);
+        }
     }
 }
