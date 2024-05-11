@@ -1,11 +1,13 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
     static Scanner scanner = new Scanner(System.in);
-    public static Official[] officials = new Official[5];
-    public static Teacher[] teachers = new Teacher[10];
+    public static List<Official> officials = new ArrayList<>();
+    public static List<Teacher> teachers = new ArrayList<>();
 
-    public static Student[] students = new Student[20];
+    public static List<Student> students = new ArrayList<>();
 
     private static int currentstudents = 0;
     private static int currentteachers = 0;
@@ -94,7 +96,7 @@ public class Main {
                     }
                 }
                 if (!repeat) {
-                    teachers[currentteachers++] = new Teacher(fn, ln, username, email, phonenumber, userRole, pass, educationalID);
+                    teachers.add( new Teacher(fn, ln, username, email, phonenumber, userRole, pass, educationalID));
                 }
 
             }
@@ -109,7 +111,7 @@ public class Main {
                     }
                 }
                 if (!repeat) {
-                    officials[currentofficials++] = new Official(fn, ln, username, email, phonenumber, userRole, pass, educationalID);
+                    officials.add( new Official(fn, ln, username, email, phonenumber, userRole, pass, educationalID));
                 }
             }
             default -> System.out.println("Wrong User!");

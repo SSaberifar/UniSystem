@@ -28,4 +28,15 @@ public class Teacher extends Person {
         return "TeacherId : " + this.educationalCode;
     }
 
+    public void AddUnit(String unitname) {
+
+        units.add( new Unit(unitname , this));
+        System.out.println(" Unit "+ unitname+" Created");
+    }
+
+    public void AddStudent(String username) {
+
+
+    }
+
 }

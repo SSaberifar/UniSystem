@@ -1,6 +1,7 @@
+import java.util.List;
 import java.util.regex.Pattern;
 
-public class Person {
+public abstract class Person {
     private String fisrtname;
     private String lastname;
     private String username;
@@ -8,6 +9,7 @@ public class Person {
     private String phonenumber;
     private String role;
     private String pass;
+    List<Unit> units;
 
     public Person(String fisrtname, String lastname, String username, String email, String phonenumber, String role, String pass) {
         this.setFisrtname(fisrtname);
@@ -31,6 +33,8 @@ public class Person {
             default -> false;
         };
     }
+
+    protected abstract void showclasses();
 
 
     public void setFisrtname(String fn) {
@@ -112,5 +116,7 @@ public class Person {
             System.out.println("pass is not valid");
         }
     }
+
+
 
 }

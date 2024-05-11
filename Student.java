@@ -42,4 +42,13 @@ public class Student extends Person {
         return "StudentId : "+this.educationalID;
     }
 
+    @Override
+    public void showclasses() {
+
+        // Add Time Here
+        System.out.println("educationalID : "+ educationalID);
+
+
+    }
+
 }
