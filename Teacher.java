@@ -1,9 +1,11 @@
+import java.util.List;
+
 public class Teacher extends Person {
     private String educationalCode;
 
     public Teacher(String fisrtname, String lastname, String username, String email, String phonenumber, String role, String pass, String educationalCode) {
         super(fisrtname, lastname, username, email, phonenumber, role, pass);
-        this.educationalCode = educationalCode;
+        this.setEducationalCode(educationalCode);
     }
 
     public String getEducationalCode() {
@@ -18,25 +20,23 @@ public class Teacher extends Person {
         }
     }
 
-    @Override
-    public boolean equals(Object obj ) {
-        return obj instanceof Teacher;
-    }
-
-    @Override
-    public  String toString() {
-        return "TeacherId : " + this.educationalCode;
-    }
-
     public void AddUnit(String unitname) {
-
         units.add( new Unit(unitname , this));
-        System.out.println(" Unit "+ unitname+" Created");
+        System.out.println("Unit "+unitname+" Created!");
     }
 
-    public void AddStudent(String username) {
-
-
+    public void AddStudent(Unit unit,String username) {
+        for(Student student:Main.students){
+            if(student.getUsername().equals(username)){
+                unit.setStudents(student);
+                System.out.println("Student "+username+" Added!");
+                break;
+            }
+        }
     }
 
+    @Override
+    protected void showtasks() {
+
+    }
 }

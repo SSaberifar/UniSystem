@@ -1,3 +1,5 @@
+import java.util.List;
+
 public class Student extends Person {
     private String major;
     private String educationalID;
@@ -33,22 +35,7 @@ public class Student extends Person {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        return obj instanceof Student;
-    }
-
-    @Override
-    public String toString() {
-        return "StudentId : "+this.educationalID;
-    }
-
-    @Override
-    public void showclasses() {
-
-        // Add Time Here
-        System.out.println("educationalID : "+ educationalID);
-
+    protected void showtasks() {
 
     }
-
 }

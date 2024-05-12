@@ -3,7 +3,7 @@ public class Official extends Person {
 
     public Official(String fisrtname, String lastname, String username, String email, String phonenumber, String role, String pass, String educationalCode) {
         super(fisrtname, lastname, username, email, phonenumber, role, pass);
-        this.educationalCode = educationalCode;
+        this.setEducationalCode(educationalCode);
     }
 
     public String getEducationalCode() {
@@ -14,17 +14,12 @@ public class Official extends Person {
         if (super.isValidId(educationalCode, getRole())) {
             this.educationalCode = educationalCode;
         } else {
-            System.out.println(" EducationalCode id not valid");
+            System.out.println("EducationalCode id not valid");
         }
     }
 
     @Override
-    public boolean equals(Object obj) {
-        return obj instanceof Official;
-    }
+    protected void showtasks() {
 
-    @Override
-    public String toString() {
-        return "OfficialID : "+ this.educationalCode;
     }
 }

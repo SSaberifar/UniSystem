@@ -6,21 +6,24 @@ public class Main {
     static Scanner scanner = new Scanner(System.in);
     public static List<Official> officials = new ArrayList<>();
     public static List<Teacher> teachers = new ArrayList<>();
-
     public static List<Student> students = new ArrayList<>();
 
-    private static int currentstudents = 0;
-    private static int currentteachers = 0;
-    private static int currentofficials = 0;
     public static void printMenu() {
         System.out.println();
         System.out.println("1- Teacher/Student classes");
         System.out.println("2- Tasks(quiz,exam,exercise)");
         System.out.println("3- notifications");
         System.out.println("4- user profile");
-        System.out.println("5- home");
-        System.out.println("6- back");
+        System.out.println("5- back");
         System.out.println();
+    }
+
+    public static void firstmenu(){
+        System.out.println("1 - Login");
+        System.out.println("2 - SignUp");
+        System.out.println("Please enter your function number:");
+        int function = scanner.nextInt();
+        setFunction(function);
     }
 
     public static void setFunction(int number) {
@@ -34,7 +37,6 @@ public class Main {
     }
 
     private static void SignUp() {
-
         String fn;
         String ln;
         String username;
@@ -45,7 +47,7 @@ public class Main {
         String educationalID;
         do {
             System.out.println("Please enter your firstname :");
-            fn= scanner.next();
+            fn = scanner.next();
             System.out.println("Please enter your lastname :");
             ln = scanner.next();
             System.out.println("Please enter your username :");
@@ -60,8 +62,7 @@ public class Main {
             repass = scanner.next();
             System.out.println("Please enter your educationalID :");
             educationalID = scanner.next();
-        }while (fn.isEmpty() || ln.isEmpty() || username.isEmpty() || email.isEmpty() ||phonenumber.isEmpty() || pass.isEmpty() || repass.isEmpty() || !pass.equals(repass) || educationalID.isEmpty());
-
+        } while (fn.isEmpty() || ln.isEmpty() || username.isEmpty() || email.isEmpty() || phonenumber.isEmpty() || pass.isEmpty() || repass.isEmpty() || !pass.equals(repass) || educationalID.isEmpty());
         System.out.println("To signup please chose your role(Teacher/Student/Official):");
         String userRole = scanner.next();
         switch (userRole) {
@@ -71,22 +72,19 @@ public class Main {
                     System.out.println("Please enter your studyfield :");
                     studyfield = scanner.next();
                 } while (studyfield == null);
-                // Check if user is repetitive
                 boolean repeat = false;
-                for (Student st : students) {
-                    if (st != null && (st.getEducationalID().equals(educationalID) || st.getUsername().equals(username) || st.getEmail().equals(email) || st.getPhonenumber().equals(phonenumber))) {
+                for (Student student : students) {
+                    if (student != null && (student.getEducationalID().equals(educationalID) || student.getUsername().equals(username) || student.getEmail().equals(email) || student.getPhonenumber().equals(phonenumber))) {
                         System.out.println("this user is repetitive :");
                         repeat = true;
                         break;
                     }
                 }
                 if (!repeat) {
-                    students[currentstudents++] = new Student(fn, ln, username, email, phonenumber, userRole, pass, studyfield, educationalID);
+                    students.add(new Student(fn, ln, username, email, phonenumber, userRole, pass, studyfield, educationalID));
                 }
-
             }
             case "Teacher" -> {
-                // Check if user is repetitive
                 boolean repeat = false;
                 for (Teacher te : teachers) {
                     if (te != null && (te.getUsername().equals(username) || te.getEmail().equals(email) || te.getPhonenumber().equals(phonenumber))) {
@@ -96,12 +94,10 @@ public class Main {
                     }
                 }
                 if (!repeat) {
-                    teachers.add( new Teacher(fn, ln, username, email, phonenumber, userRole, pass, educationalID));
+                    teachers.add(new Teacher(fn, ln, username, email, phonenumber, userRole, pass, educationalID));
                 }
-
             }
             case "Official" -> {
-                // Check if user is repetitive
                 boolean repeat = false;
                 for (Official ofi : officials) {
                     if (ofi != null && (ofi.getUsername().equals(username) || ofi.getEmail().equals(email) || ofi.getPhonenumber().equals(phonenumber))) {
@@ -111,13 +107,11 @@ public class Main {
                     }
                 }
                 if (!repeat) {
-                    officials.add( new Official(fn, ln, username, email, phonenumber, userRole, pass, educationalID));
+                    officials.add(new Official(fn, ln, username, email, phonenumber, userRole, pass, educationalID));
                 }
             }
             default -> System.out.println("Wrong User!");
         }
-
-
     }
 
     private static void Login() {
@@ -137,7 +131,7 @@ public class Main {
             for (Student student : students) {
                 if (student!=null && student.getPass().equals(userPass) && student.getEducationalID().equals(userId)) {
                     System.out.println("Welcome " + student.getUsername());
-                    printMenu();
+                    student.selectmenu();
                     break;
                 }
             }
@@ -154,8 +148,8 @@ public class Main {
             }
             for (Teacher teacher : teachers) {
                 if (teacher!=null && teacher.getPass().equals(userPass) && teacher.getEducationalCode().equals(userCode)) {
-                    System.out.println("Welcome" + teacher.getUsername());
-                    printMenu();
+                    System.out.println("Welcome " + teacher.getUsername());
+                    teacher.selectmenu();
                     break;
                 }
             }
@@ -165,13 +159,8 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        for(int i=0;i<3;i++){
-            System.out.println("1 - Login");
-            System.out.println("2 - SignUp");
-            System.out.println("Please enter your function number:");
-            int function = scanner.nextInt();
-            setFunction(function);
+        for(int i=0;i<2;i++){
+            firstmenu();
         }
     }
 }
