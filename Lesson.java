@@ -1,3 +1,4 @@
+import java.util.Date;
 import java.util.List;
 
 public class Lesson extends Task {
@@ -6,4 +7,7 @@ public class Lesson extends Task {
     private List<Student> students;
 
 
+    public Lesson(Date finish_date, String name) {
+        super(finish_date, name);
+    }
 }

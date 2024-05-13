@@ -10,4 +10,7 @@ public class Quiz extends Task{
     private List<Question> questions;
     private int score;
 
+    public Quiz(Date finish_date, String name) {
+        super(finish_date, name);
+    }
 }
