@@ -26,48 +26,16 @@ public abstract class Person {
         this.setPass(pass);
     }
 
-    public boolean isValidString(String input) {
-        return Pattern.matches("^[a-zA-Z]{1,18}$", input);
-    }
-    public boolean isValidId(String id, String role) {
-        return switch (role) {
-            case "Student" -> Pattern.matches("^[0-9]{10}$", id);
-            case "Teacher" -> Pattern.matches("^[0-9]{6}$", id);
-            case "Official" -> Pattern.matches("^[0-9]{4}$", id);
-            default -> false;
-        };
-    }
-    public void showclasses(){
-        if(units.isEmpty()){
-            System.out.println("You dont have class!");
-            selectmenu();
-        }else{
-            for(int i=0;i<units.size();i++){
-                if(units.get(i)!=null){
-                    System.out.println((i+1)+units.get(i).unitname);
-                }
-            }
-        }
-    }
-    protected abstract void showtasks();
+    ////////////////////setter&getter/////////////////
 
-    public void showInfo(){
-        System.out.println(fisrtname);
-        System.out.println(lastname);
-        System.out.println(email);
-        System.out.println(phonenumber);
-        System.out.println(pass);
-    }
-    public void shownotif(){
-
-    }
     public void setFisrtname(String fn) {
         if (isValidString(fn)) {
             this.fisrtname = fn;
-        }else {
+        } else {
             System.out.println("First name is not valid");
         }
     }
+
     public void setLastname(String ln) {
         if (isValidString(ln)) {
             this.lastname = ln;
@@ -75,6 +43,7 @@ public abstract class Person {
             System.out.println("Last name is not valid");
         }
     }
+
     public void setUsername(String username) {
         if (Pattern.matches("^[A-Za-z0-9]{5,12}$", username)) {
             this.username = username;
@@ -139,11 +108,41 @@ public abstract class Person {
         }
     }
 
-    public void selectmenu(){
+    ////////////////////methods/////////////////
+
+    public boolean isValidString(String input) {
+        return Pattern.matches("^[a-zA-Z]{1,18}$", input);
+    }
+
+    public boolean isValidId(String id, String role) {
+        return switch (role) {
+            case "Student" -> Pattern.matches("^[0-9]{10}$", id);
+            case "Teacher" -> Pattern.matches("^[0-9]{6}$", id);
+            case "Official" -> Pattern.matches("^[0-9]{4}$", id);
+            default -> false;
+        };
+    }
+
+    public abstract void showclasses();
+
+    protected abstract void showtasks();
+
+    public abstract void shownotif();
+
+    public void showInfo() {
+        System.out.println(fisrtname);
+        System.out.println(lastname);
+        System.out.println(email);
+        System.out.println(phonenumber);
+        System.out.println(pass);
+        System.out.println();
+    }
+
+    public void selectmenu() {
         Main.printMenu();
         System.out.println("Please enter your operation:");
         int ope = scanner.nextInt();
-        switch (ope){
+        switch (ope) {
             case 1:
                 showclasses();
                 selectmenu();

@@ -1,4 +1,7 @@
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Scanner;
 
@@ -9,7 +12,11 @@ public class Main {
     public static List<Student> students = new ArrayList<>();
 
     public static void printMenu() {
-        System.out.println();
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        Calendar cal = Calendar.getInstance();
+
+        System.out.println(dateFormat.format(cal.getTime()));
         System.out.println("1- Teacher/Student classes");
         System.out.println("2- Tasks(quiz,exam,exercise)");
         System.out.println("3- notifications");
@@ -18,7 +25,7 @@ public class Main {
         System.out.println();
     }
 
-    public static void firstmenu(){
+    public static void firstmenu() {
         System.out.println("1 - Login");
         System.out.println("2 - SignUp");
         System.out.println("Please enter your function number:");
@@ -129,7 +136,8 @@ public class Main {
                 userPass = scanner.next();
             }
             for (Student student : students) {
-                if (student!=null && student.getPass().equals(userPass) && student.getEducationalID().equals(userId)) {
+                if (student != null && student.getPass().equals(userPass) && student.getEducationalID().equals(userId)) {
+                    System.out.println();
                     System.out.println("Welcome " + student.getUsername());
                     student.selectmenu();
                     break;
@@ -147,7 +155,8 @@ public class Main {
                 userPass = scanner.next();
             }
             for (Teacher teacher : teachers) {
-                if (teacher!=null && teacher.getPass().equals(userPass) && teacher.getEducationalCode().equals(userCode)) {
+                if (teacher != null && teacher.getPass().equals(userPass) && teacher.getEducationalCode().equals(userCode)) {
+                    System.out.println();
                     System.out.println("Welcome " + teacher.getUsername());
                     teacher.selectmenu();
                     break;
@@ -159,7 +168,7 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        for(int i=0;i<2;i++){
+        for (int i = 0; i < 3; i++) {
             firstmenu();
         }
     }

@@ -1,4 +1,4 @@
-import java.util.List;
+
 
 public class Student extends Person {
     private String major;
@@ -35,7 +35,38 @@ public class Student extends Person {
     }
 
     @Override
+    public void showclasses() {
+        if (units.isEmpty()) {
+            System.out.println("You dont have class!");
+            selectmenu();
+        } else {
+            for (int i = 0; i < units.size(); i++) {
+                if (units.get(i) != null) {
+                    System.out.println((i + 1) + units.get(i).unitname);
+                }
+            }
+        }
+    }
+
+    @Override
     protected void showtasks() {
 
+    }
+
+    @Override
+    public void shownotif() {
+        for(Unit unit:units){
+            if (unit.notifications.isEmpty()) {
+                System.out.println("You dont have notification!");
+                selectmenu();
+            } else {
+                for (int i = 0; i < unit.notifications.size(); i++) {
+                    if (unit.notifications.get(i) != null) {
+                        System.out.println(unit.getUnitname() + ":");
+                        System.out.println((i + 1) + unit.notifications.get(i));
+                    }
+                }
+            }
+        }
     }
 }

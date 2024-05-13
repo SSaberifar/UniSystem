@@ -19,7 +19,17 @@ public class Official extends Person {
     }
 
     @Override
+    public void showclasses() {
+
+    }
+
+    @Override
     protected void showtasks() {
+
+    }
+
+    @Override
+    public void shownotif() {
 
     }
 }

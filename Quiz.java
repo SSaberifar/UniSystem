@@ -6,7 +6,7 @@ public class Quiz extends Task{
 
     private String name;
     private Date date;
-    private Lesson lesson;
+    private Unit unit;
     private List<Question> questions;
     private int score;
 
