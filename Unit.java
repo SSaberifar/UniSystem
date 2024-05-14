@@ -8,6 +8,8 @@ public class Unit {
     String unitname;
     List<Student> students = new ArrayList<>(10);
     List<String> notifications = new ArrayList<>(10);
+    List<Task> tasks = new ArrayList<>();
+    List<Quiz> quizzes = new ArrayList<>();
     private Teacher teacher;
 
     public Unit(String unitname, Teacher teacher) {
@@ -19,6 +21,10 @@ public class Unit {
         if (teacher != null) {
             this.teacher = teacher;
         }
+    }
+
+    private void AddTask(String tasktype) {
+
     }
 
     public String getUnitname() {

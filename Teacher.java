@@ -1,9 +1,13 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Teacher extends Person {
 
     Scanner scanner = new Scanner(System.in);
     private String educationalCode;
+
+    private List<Unit> units = new ArrayList<>();
 
     public Teacher(String fisrtname, String lastname, String username, String email, String phonenumber, String role, String pass, String educationalCode) {
         super(fisrtname, lastname, username, email, phonenumber, role, pass);
