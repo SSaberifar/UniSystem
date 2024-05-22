@@ -1,3 +1,5 @@
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -9,14 +11,13 @@ public abstract class Task {
     private Date deadline;
     private Date remaining_time;
     private String name;
-    private boolean done = false;
     private Unit unit;
-    private List<Question> questions = new ArrayList<>();
+
 
     // Constructor
-    public Task(Date finish_date ,String name ,Unit unit) {
+    public Task(String deadline ,String name,Unit unit) {
         setName(name);
-        setFinish_date(finish_date);
+        setDeadline(deadline);
         this.unit = unit;
     }
 
@@ -30,9 +31,22 @@ public abstract class Task {
         }
     }
 
-    private void setFinish_date(Date fdate) {
-        if (fdate != null) {
-            this.deadline = fdate;
+    private void setDeadline(String deadline) {
+        if (deadline.isEmpty()) {
+            System.out.println("date can't be empty!");
+            setDeadline(scanner.next());
+        } else {
+            SimpleDateFormat sdf = new SimpleDateFormat("hh:mm");
+            try{
+                this.deadline = sdf.parse(deadline);
+            } catch (ParseException e) {
+                System.out.println(" deadline time is invalid! enter hours:minutes");
+                setDeadline(scanner.next());
+            }
         }
+    }
+
+    public String getName(){
+        return this.name;
     }
 }
