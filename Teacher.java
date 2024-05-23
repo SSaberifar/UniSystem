@@ -1,13 +1,9 @@
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class Teacher extends Person {
 
     Scanner scanner = new Scanner(System.in);
     private String educationalCode;
-
-    private List<Unit> units = new ArrayList<>();
 
     public Teacher(String fisrtname, String lastname, String username, String email, String phonenumber, String role, String pass, String educationalCode) {
         super(fisrtname, lastname, username, email, phonenumber, role, pass);
@@ -18,31 +14,47 @@ public class Teacher extends Person {
         return educationalCode;
     }
 
-    public void setEducationalCode(String educationalCode) {
+    public void setEducationalCode(String educationalCode) throws InvalidIDException {
         if (super.isValidId(educationalCode, getRole())) {
             this.educationalCode = educationalCode;
+            System.out.println("ID Processed");
         } else {
-            System.out.println(" EducationalCode id not valid");
+            throw new InvalidIDException("please enter valid educational code");
         }
     }
 
     ////////////////////methods/////////////////
 
-    public void AddUnit() {
-        String unitname = scanner.next();
-        units.add(new Unit(unitname, this));
-        System.out.println("Unit Created!");
+    public void AddUnit() throws CustomArrayException {
+        if (units.size() >= 10) {
+            throw new CustomArrayException("Cannot add more units, the array is full!");
+        }else{
+            String unitname = scanner.next();
+            units.add(new Unit(unitname, this));
+            System.out.println("Unit Created!");
+        }
     }
 
     public void deleteUnit() {
-        String deleteunit = scanner.next();
-        for(Unit unit:units){
-            if(unit.getUnitname().equals(deleteunit)){
-                units.remove(unit);
-                System.out.println("Unit Removed!");
-                break;
+        try {
+            String deleteunit = scanner.next();
+            boolean unitFound = false;
+            for (Unit unit : units) {
+                if (unit.getUnitname().equals(deleteunit)) {
+                    units.remove(unit);
+                    System.out.println("Unit Removed!");
+                    unitFound = true;
+                    break;
+                }
             }
+            if (!unitFound) {
+                throw new CustomArrayException("Unit not found!");
+            }
+        } catch (CustomArrayException e) {
+            System.out.println("Array index out of bounds: " + e.getMessage());
+            e.printStackTrace();
         }
+
     }
 
     public void AddStudent(String unitname, String username) {
@@ -75,17 +87,17 @@ public class Teacher extends Person {
         }
     }
 
-    public void Addnotif(Unit unitname) {
+    public void Addnotif(Unit unit) {
         String notif = scanner.next();
-        unitname.notifications.add(notif);
+        unit.notifications.add(notif);
         System.out.println("notif Added!");
     }
 
-    public void deletenotif(Unit unitname) {
+    public void deletenotif(Unit unit) {
         String tag = scanner.next();
-        for(String sms:unitname.notifications){
-            if(sms.equals(tag)){
-                unitname.notifications.remove(sms);
+        for (String sms : unit.notifications) {
+            if (sms.equals(tag)) {
+                unit.notifications.remove(sms);
                 System.out.println("notification Removed!");
                 break;
             }
@@ -110,7 +122,12 @@ public class Teacher extends Person {
             System.out.println("Do you want create new class?(y/n)");
             String answer = scanner.next();
             if (answer.equals("y")) {
-                AddUnit();
+                try {
+                    AddUnit();
+                }catch (CustomArrayException e){
+                    System.out.println(e.getMessage());
+                    e.printStackTrace();
+                }
             }
             System.out.println("Do you want delete new class?(y/n)");
             String deleteans = scanner.next();
@@ -142,7 +159,7 @@ public class Teacher extends Person {
 
     @Override
     public void shownotif() {
-        for (Unit unit:units){
+        for (Unit unit : units) {
             if (unit.notifications.isEmpty()) {
                 System.out.println("You dont have notification!");
                 System.out.println("Do you want create new notification?(y/n)");
@@ -151,8 +168,8 @@ public class Teacher extends Person {
                     Addnotif(unit);
                 }
             } else {
-                for(int i=0;i<unit.notifications.size();i++){
-                    if(unit.notifications.get(i)!=null){
+                for (int i = 0; i < unit.notifications.size(); i++) {
+                    if (unit.notifications.get(i) != null) {
                         System.out.println(unit.notifications.get(i));
                     }
                 }

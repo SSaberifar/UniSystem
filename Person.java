@@ -28,28 +28,56 @@ public abstract class Person {
 
     ////////////////////setter&getter/////////////////
 
-    public void setFisrtname(String fn) {
+    public void setFisrtname(String fn) throws InvalidFNException {
         if (isValidString(fn)) {
             this.fisrtname = fn;
         } else {
-            System.out.println("First name is not valid");
+            throw new InvalidFNException("please enter valid first name");
         }
     }
 
-    public void setLastname(String ln) {
+    public void setLastname(String ln) throws InvalidLNException {
         if (isValidString(ln)) {
             this.lastname = ln;
         } else {
-            System.out.println("Last name is not valid");
+            throw new InvalidLNException("please enter valid last name");
         }
     }
 
-    public void setUsername(String username) {
+    public void setUsername(String username) throws InvalidUNException {
         if (Pattern.matches("^[A-Za-z0-9]{5,12}$", username)) {
             this.username = username;
         } else {
-            System.out.println("Username is not valid ");
+            throw new InvalidUNException("please enter valid user name");
         }
+    }
+
+    public void setEmail(String email) throws InvalidEmailException {
+        if (Pattern.matches("^[a-zA-Z0-9._%+-]{1,18}@[a-z.-]{1,8}\\.[a-z]{1,4}$", email)) {
+            this.email = email;
+        } else {
+            throw new InvalidEmailException("please enter valid email");
+        }
+    }
+
+    public void setPhonenumber(String phonenumber) throws InvalidPhoneException {
+        if (Pattern.matches("^09\\d{9}$", phonenumber)) {
+            this.phonenumber = phonenumber;
+        } else {
+            throw new InvalidPhoneException("please enter valid phone number");
+        }
+    }
+
+    public void setPass(String pass) throws InvalidPassException {
+        if (Pattern.matches("^[A-Za-z0-9]{8,12}$", pass)) {
+            this.pass = pass;
+        } else {
+            throw new InvalidPassException("please enter valid password");
+        }
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public String getFisrtname() {
@@ -68,44 +96,17 @@ public abstract class Person {
         return email;
     }
 
-    public void setEmail(String email) {
-        if (Pattern.matches("^[a-zA-Z0-9._%+-]{1,18}@[a-z.-]{1,8}\\.[a-z]{1,4}$", email)) {
-            this.email = email;
-        } else {
-            System.out.println("email is not valid");
-        }
-    }
 
     public String getPhonenumber() {
         return phonenumber;
-    }
-
-    public void setPhonenumber(String phonenumber) {
-        if (Pattern.matches("^09\\d{9}$", phonenumber)) {
-            this.phonenumber = phonenumber;
-        } else {
-            System.out.println("phone number is not valid");
-        }
     }
 
     public String getRole() {
         return role;
     }
 
-    public void setRole(String role) {
-        this.role = role;
-    }
-
     public String getPass() {
         return pass;
-    }
-
-    public void setPass(String pass) {
-        if (Pattern.matches("^[A-Za-z0-9]{8,12}$", pass)) {
-            this.pass = pass;
-        } else {
-            System.out.println("pass is not valid");
-        }
     }
 
     ////////////////////methods/////////////////
@@ -130,11 +131,11 @@ public abstract class Person {
     public abstract void shownotif();
 
     public void showInfo() {
-        System.out.println(fisrtname);
-        System.out.println(lastname);
-        System.out.println(email);
-        System.out.println(phonenumber);
-        System.out.println(pass);
+        System.out.println(getFisrtname());
+        System.out.println(getLastname());
+        System.out.println(getEmail());
+        System.out.println(getPhonenumber());
+        System.out.println(getPass());
         System.out.println();
     }
 

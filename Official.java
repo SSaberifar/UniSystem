@@ -10,11 +10,12 @@ public class Official extends Person {
         return educationalCode;
     }
 
-    public void setEducationalCode(String educationalCode) {
+    public void setEducationalCode(String educationalCode) throws InvalidIDException {
         if (super.isValidId(educationalCode, getRole())) {
             this.educationalCode = educationalCode;
+            System.out.println("ID Processed");
         } else {
-            System.out.println("EducationalCode id not valid");
+            throw new InvalidIDException("please enter valid educational code");
         }
     }
 

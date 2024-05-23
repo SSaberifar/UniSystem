@@ -6,8 +6,8 @@ public class Student extends Person {
 
     public Student(String fisrtname, String lastname, String username, String email, String phonenumber, String role, String pass, String studyfield, String educationalID) {
         super(fisrtname, lastname, username, email, phonenumber, role, pass);
-        this.major = studyfield;
-        this.educationalID = educationalID;
+        this.setStudyfield(studyfield);
+        this.setEducationalID(educationalID);
     }
 
     public String getStudyfield() {
@@ -26,11 +26,12 @@ public class Student extends Person {
         }
     }
 
-    public void setEducationalID(String educationalID) {
+    public void setEducationalID(String educationalID) throws InvalidIDException {
         if (super.isValidId(educationalID, getRole())) {
             this.educationalID = educationalID;
+            System.out.println("ID Processed");
         } else {
-            System.out.println(" EducationalID is not valid");
+            throw new InvalidIDException("please enter valid student id");
         }
     }
 
@@ -55,7 +56,7 @@ public class Student extends Person {
 
     @Override
     public void shownotif() {
-        for(Unit unit:units){
+        for (Unit unit : units) {
             if (unit.notifications.isEmpty()) {
                 System.out.println("You dont have notification!");
                 selectmenu();
