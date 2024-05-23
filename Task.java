@@ -47,4 +47,8 @@ public abstract class Task {
             setName(scanner.next());
         }
     }
+
+    public Date getDeadline(){
+        return this.deadline;
+    }
 }

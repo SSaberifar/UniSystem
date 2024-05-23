@@ -1,3 +1,6 @@
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -58,8 +61,14 @@ public class Unit {
         }
     }
 
-    private void AddTask(String tasktype) {
-
+    private void getQuestionState(String deadline) {
+        LocalDateTime finishtime= LocalDateTime.parse(deadline);
+        Duration duration = Duration.between(LocalDateTime.now(),finishtime);
+        if ( finishtime.isAfter(LocalDateTime.now())){
+            System.out.println("You have "+duration.toHours()+" hours and "+duration.toMinutes()+" minutes time for this question");
+        } else {
+            System.out.println(duration.toHours()+"hours and "+duration.toMinutes()+" minutes have pass since the homework deadline!");
+        }
     }
 
     public String getUnitname() {

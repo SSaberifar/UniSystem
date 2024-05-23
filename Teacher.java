@@ -29,6 +29,34 @@ public class Teacher extends Person {
 
     ////////////////////methods/////////////////
 
+    public void AddQuiz(){
+        System.out.println("Enter unit name");
+        String unitname = scanner.next();
+        boolean validunit = false;
+        int unitindex = 0;
+        for (Unit unit : units){
+            if (unitname.equals(unit.getUnitname())){
+                validunit = true;
+                break;
+            }
+            unitindex++;
+        }
+        if (validunit){
+            System.out.println("Enter start date , quiz time , finish date and quiz name :");
+            units.get(unitindex).AddQuiz(scanner.next(), scanner.next(), scanner.next(), scanner.next());
+            Main.firstmenu();
+        } else {
+            System.out.println("invalid unit name! do you want try again?y/n");
+            if (scanner.next().charAt(0) == 'y'){
+                AddQuiz();
+            } else {
+                System.out.println("Please enter your function number:");
+                Main.setFunction(scanner.nextInt());
+            }
+        }
+    }
+
+
     public void AddUnit() throws Exceptions.CustomArrayException {
         if (units.size() >= 10) {
             throw new Exceptions.CustomArrayException("Cannot add more units, the array is full!");
