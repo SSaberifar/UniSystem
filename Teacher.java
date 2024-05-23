@@ -7,28 +7,32 @@ public class Teacher extends Person {
 
     public Teacher(String fisrtname, String lastname, String username, String email, String phonenumber, String role, String pass, String educationalCode) {
         super(fisrtname, lastname, username, email, phonenumber, role, pass);
-        this.setEducationalCode(educationalCode);
+        try {
+            this.setEducationalCode(educationalCode);
+        } catch (Exceptions.InvalidIDException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public String getEducationalCode() {
         return educationalCode;
     }
 
-    public void setEducationalCode(String educationalCode) throws InvalidIDException {
+    public void setEducationalCode(String educationalCode) throws Exceptions.InvalidIDException {
         if (super.isValidId(educationalCode, getRole())) {
             this.educationalCode = educationalCode;
             System.out.println("ID Processed");
         } else {
-            throw new InvalidIDException("please enter valid educational code");
+            throw new Exceptions.InvalidIDException("please enter valid educational code");
         }
     }
 
     ////////////////////methods/////////////////
 
-    public void AddUnit() throws CustomArrayException {
+    public void AddUnit() throws Exceptions.CustomArrayException {
         if (units.size() >= 10) {
-            throw new CustomArrayException("Cannot add more units, the array is full!");
-        }else{
+            throw new Exceptions.CustomArrayException("Cannot add more units, the array is full!");
+        } else {
             String unitname = scanner.next();
             units.add(new Unit(unitname, this));
             System.out.println("Unit Created!");
@@ -48,9 +52,9 @@ public class Teacher extends Person {
                 }
             }
             if (!unitFound) {
-                throw new CustomArrayException("Unit not found!");
+                throw new Exceptions.CustomArrayException("Unit not found!");
             }
-        } catch (CustomArrayException e) {
+        } catch (Exceptions.CustomArrayException e) {
             System.out.println("Array index out of bounds: " + e.getMessage());
             e.printStackTrace();
         }
@@ -111,7 +115,11 @@ public class Teacher extends Person {
             System.out.println("Do you want create new class?(y/n)");
             String classop = scanner.next();
             if (classop.equals("y")) {
-                AddUnit();
+                try {
+                    AddUnit();
+                } catch (Exceptions.CustomArrayException e) {
+                    throw new RuntimeException(e);
+                }
             }
         } else {
             for (int i = 0; i < units.size(); i++) {
@@ -124,7 +132,7 @@ public class Teacher extends Person {
             if (answer.equals("y")) {
                 try {
                     AddUnit();
-                }catch (CustomArrayException e){
+                } catch (Exceptions.CustomArrayException e) {
                     System.out.println(e.getMessage());
                     e.printStackTrace();
                 }

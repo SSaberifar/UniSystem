@@ -1,8 +1,6 @@
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Scanner;
 
 public abstract class Task {
@@ -11,24 +9,14 @@ public abstract class Task {
     private Date deadline;
     private Date remaining_time;
     private String name;
-    private Unit unit;
+    private final Unit unit;
 
 
     // Constructor
-    public Task(String deadline ,String name,Unit unit) {
+    public Task(String deadline, String name, Unit unit) {
         setName(name);
         setDeadline(deadline);
         this.unit = unit;
-    }
-
-    // Setter And Getter
-    private void setName(String name) {
-        if (!name.isEmpty()) {
-            this.name= name;
-        } else {
-            System.out.println("Enter valid name for this task");
-            setName( scanner.next());
-        }
     }
 
     private void setDeadline(String deadline) {
@@ -37,7 +25,7 @@ public abstract class Task {
             setDeadline(scanner.next());
         } else {
             SimpleDateFormat sdf = new SimpleDateFormat("hh:mm");
-            try{
+            try {
                 this.deadline = sdf.parse(deadline);
             } catch (ParseException e) {
                 System.out.println(" deadline time is invalid! enter hours:minutes");
@@ -46,7 +34,17 @@ public abstract class Task {
         }
     }
 
-    public String getName(){
+    public String getName() {
         return this.name;
+    }
+
+    // Setter And Getter
+    private void setName(String name) {
+        if (!name.isEmpty()) {
+            this.name = name;
+        } else {
+            System.out.println("Enter valid name for this task");
+            setName(scanner.next());
+        }
     }
 }

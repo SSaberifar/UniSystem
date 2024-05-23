@@ -1,11 +1,12 @@
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 public abstract class Person {
 
     Scanner scanner = new Scanner(System.in);
+    List<Unit> units = new ArrayList<>(10);
     private String fisrtname;
     private String lastname;
     private String username;
@@ -13,100 +14,122 @@ public abstract class Person {
     private String phonenumber;
     private String role;
     private String pass;
-    List<Unit> units = new ArrayList<>(10);
 
 
     public Person(String fisrtname, String lastname, String username, String email, String phonenumber, String role, String pass) {
-        this.setFisrtname(fisrtname);
-        this.setLastname(lastname);
-        this.setUsername(username);
-        this.setEmail(email);
-        this.setPhonenumber(phonenumber);
+        try {
+            this.setFisrtname(fisrtname);
+        } catch (Exceptions.InvalidFNException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            this.setLastname(lastname);
+        } catch (Exceptions.InvalidLNException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            this.setUsername(username);
+        } catch (Exceptions.InvalidUNException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            this.setEmail(email);
+        } catch (Exceptions.InvalidEmailException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            this.setPhonenumber(phonenumber);
+        } catch (Exceptions.InvalidPhoneException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            this.setPass(pass);
+        } catch (Exceptions.InvalidPassException e) {
+            throw new RuntimeException(e);
+        }
         this.setRole(role);
-        this.setPass(pass);
     }
 
     ////////////////////setter&getter/////////////////
 
-    public void setFisrtname(String fn) throws InvalidFNException {
+    public String getFisrtname() {
+        return fisrtname;
+    }
+
+    public void setFisrtname(String fn) throws Exceptions.InvalidFNException {
         if (isValidString(fn)) {
             this.fisrtname = fn;
         } else {
-            throw new InvalidFNException("please enter valid first name");
+            throw new Exceptions.InvalidFNException("please enter valid first name");
         }
-    }
-
-    public void setLastname(String ln) throws InvalidLNException {
-        if (isValidString(ln)) {
-            this.lastname = ln;
-        } else {
-            throw new InvalidLNException("please enter valid last name");
-        }
-    }
-
-    public void setUsername(String username) throws InvalidUNException {
-        if (Pattern.matches("^[A-Za-z0-9]{5,12}$", username)) {
-            this.username = username;
-        } else {
-            throw new InvalidUNException("please enter valid user name");
-        }
-    }
-
-    public void setEmail(String email) throws InvalidEmailException {
-        if (Pattern.matches("^[a-zA-Z0-9._%+-]{1,18}@[a-z.-]{1,8}\\.[a-z]{1,4}$", email)) {
-            this.email = email;
-        } else {
-            throw new InvalidEmailException("please enter valid email");
-        }
-    }
-
-    public void setPhonenumber(String phonenumber) throws InvalidPhoneException {
-        if (Pattern.matches("^09\\d{9}$", phonenumber)) {
-            this.phonenumber = phonenumber;
-        } else {
-            throw new InvalidPhoneException("please enter valid phone number");
-        }
-    }
-
-    public void setPass(String pass) throws InvalidPassException {
-        if (Pattern.matches("^[A-Za-z0-9]{8,12}$", pass)) {
-            this.pass = pass;
-        } else {
-            throw new InvalidPassException("please enter valid password");
-        }
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    public String getFisrtname() {
-        return fisrtname;
     }
 
     public String getLastname() {
         return lastname;
     }
 
+    public void setLastname(String ln) throws Exceptions.InvalidLNException {
+        if (isValidString(ln)) {
+            this.lastname = ln;
+        } else {
+            throw new Exceptions.InvalidLNException("please enter valid last name");
+        }
+    }
+
     public String getUsername() {
         return username;
+    }
+
+    public void setUsername(String username) throws Exceptions.InvalidUNException {
+        if (Pattern.matches("^[A-Za-z0-9]{5,12}$", username)) {
+            this.username = username;
+        } else {
+            throw new Exceptions.InvalidUNException("please enter valid user name");
+        }
     }
 
     public String getEmail() {
         return email;
     }
 
+    public void setEmail(String email) throws Exceptions.InvalidEmailException {
+        if (Pattern.matches("^[a-zA-Z0-9._%+-]{1,18}@[a-z.-]{1,8}\\.[a-z]{1,4}$", email)) {
+            this.email = email;
+        } else {
+            throw new Exceptions.InvalidEmailException("please enter valid email");
+        }
+    }
 
     public String getPhonenumber() {
         return phonenumber;
+    }
+
+    public void setPhonenumber(String phonenumber) throws Exceptions.InvalidPhoneException {
+        if (Pattern.matches("^09\\d{9}$", phonenumber)) {
+            this.phonenumber = phonenumber;
+        } else {
+            throw new Exceptions.InvalidPhoneException("please enter valid phone number");
+        }
     }
 
     public String getRole() {
         return role;
     }
 
+    public void setRole(String role) {
+        this.role = role;
+    }
+
     public String getPass() {
         return pass;
+    }
+
+    public void setPass(String pass) throws Exceptions.InvalidPassException {
+        if (Pattern.matches("^[A-Za-z0-9]{8,12}$", pass)) {
+            this.pass = pass;
+        } else {
+            throw new Exceptions.InvalidPassException("please enter valid password");
+        }
     }
 
     ////////////////////methods/////////////////

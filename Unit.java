@@ -1,6 +1,4 @@
-import java.text.spi.BreakIteratorProvider;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -21,48 +19,42 @@ public class Unit {
     }
 
     // Methods
-    public void AddQuestion(String deadline , String name ,String questiontext,String answertext, Unit unit) {
+    public void AddQuestion(String deadline, String name, String questiontext, String answertext, Unit unit) {
 
-        if ( !deadline.isEmpty() && !name.isEmpty() && !questiontext.isEmpty() && !answertext.isEmpty()) {
-            questions.add( new Question(deadline,name,questiontext,answertext,this));
+        if (!deadline.isEmpty() && !name.isEmpty() && !questiontext.isEmpty() && !answertext.isEmpty()) {
+            questions.add(new Question(deadline, name, questiontext, answertext, this));
             System.out.println("question added , do you want to add another question?y/n");
             if (scanner.next().charAt(0) == 'y') {
                 System.out.println("enter date, then question name ,text and answer");
-                AddQuestion( scanner.next(), scanner.next(),scanner.next(),scanner.next(),this);
+                AddQuestion(scanner.next(), scanner.next(), scanner.next(), scanner.next(), this);
             }
         } else {
             System.out.println("deadline and question name can't be empty , do you want try again?y/n");
             if (scanner.next().charAt(0) == 'y') {
                 System.out.println("enter date, then question name ,text and answer");
-                AddQuestion(scanner.next(), scanner.next(),scanner.next(), scanner.next(), this);
+                AddQuestion(scanner.next(), scanner.next(), scanner.next(), scanner.next(), this);
             }
         }
     }
 
-    public void AddQuiz(String startdate,String quiztime,String finishdate , String quizname ) {
-        if (startdate.isEmpty() || quiztime.isEmpty() || finishdate.isEmpty() || quizname.isEmpty()){
+    public void AddQuiz(String startdate, String quiztime, String finishdate, String quizname) {
+        if (startdate.isEmpty() || quiztime.isEmpty() || finishdate.isEmpty() || quizname.isEmpty()) {
             System.out.println("start/finish date and quiz date/name can't be empty! try again");
-            AddQuiz(scanner.next(),scanner.next(),scanner.next(),scanner.next());
+            AddQuiz(scanner.next(), scanner.next(), scanner.next(), scanner.next());
         } else {
-            quizzes.add(new Quiz(startdate,quiztime,finishdate,quizname,this.teacher,this));
+            quizzes.add(new Quiz(startdate, quiztime, finishdate, quizname, this.teacher, this));
             currentquize++;
             boolean repeat = false;
             do {
                 repeat = false;
                 System.out.println("enter your questions and answers :");
-                quizzes.get(currentquize).setProblem_answers(scanner.next(),scanner.next());
+                quizzes.get(currentquize).setProblem_answers(scanner.next(), scanner.next());
                 System.out.println("question and answer add successfully do you want to add another problem?y/n");
-                if (scanner.next().charAt(0) == 'y'){
+                if (scanner.next().charAt(0) == 'y') {
                     repeat = true;
                 }
-            }while(repeat);
+            } while (repeat);
 
-        }
-    }
-
-    private void setTeacher(Teacher teacher) {
-        if (teacher != null) {
-            this.teacher = teacher;
         }
     }
 
@@ -93,5 +85,11 @@ public class Unit {
 
     public Teacher getTeacher() {
         return teacher;
+    }
+
+    private void setTeacher(Teacher teacher) {
+        if (teacher != null) {
+            this.teacher = teacher;
+        }
     }
 }

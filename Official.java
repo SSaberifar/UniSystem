@@ -3,19 +3,23 @@ public class Official extends Person {
 
     public Official(String fisrtname, String lastname, String username, String email, String phonenumber, String role, String pass, String educationalCode) {
         super(fisrtname, lastname, username, email, phonenumber, role, pass);
-        this.setEducationalCode(educationalCode);
+        try {
+            this.setEducationalCode(educationalCode);
+        } catch (Exceptions.InvalidIDException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public String getEducationalCode() {
         return educationalCode;
     }
 
-    public void setEducationalCode(String educationalCode) throws InvalidIDException {
+    public void setEducationalCode(String educationalCode) throws Exceptions.InvalidIDException {
         if (super.isValidId(educationalCode, getRole())) {
             this.educationalCode = educationalCode;
             System.out.println("ID Processed");
         } else {
-            throw new InvalidIDException("please enter valid educational code");
+            throw new Exceptions.InvalidIDException("please enter valid educational code");
         }
     }
 

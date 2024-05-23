@@ -1,5 +1,3 @@
-
-
 public class Student extends Person {
     private String major;
     private String educationalID;
@@ -7,15 +5,15 @@ public class Student extends Person {
     public Student(String fisrtname, String lastname, String username, String email, String phonenumber, String role, String pass, String studyfield, String educationalID) {
         super(fisrtname, lastname, username, email, phonenumber, role, pass);
         this.setStudyfield(studyfield);
-        this.setEducationalID(educationalID);
+        try {
+            this.setEducationalID(educationalID);
+        } catch (Exceptions.InvalidIDException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public String getStudyfield() {
         return major;
-    }
-
-    public String getEducationalID() {
-        return educationalID;
     }
 
     public void setStudyfield(String studyfield) {
@@ -26,12 +24,16 @@ public class Student extends Person {
         }
     }
 
-    public void setEducationalID(String educationalID) throws InvalidIDException {
+    public String getEducationalID() {
+        return educationalID;
+    }
+
+    public void setEducationalID(String educationalID) throws Exceptions.InvalidIDException {
         if (super.isValidId(educationalID, getRole())) {
             this.educationalID = educationalID;
             System.out.println("ID Processed");
         } else {
-            throw new InvalidIDException("please enter valid student id");
+            throw new Exceptions.InvalidIDException("please enter valid student id");
         }
     }
 

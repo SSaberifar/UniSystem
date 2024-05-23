@@ -6,16 +6,14 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Main {
-    static Scanner scanner = new Scanner(System.in);
     public static List<Official> officials = new ArrayList<>();
     public static List<Teacher> teachers = new ArrayList<>();
     public static List<Student> students = new ArrayList<>();
+    static Scanner scanner = new Scanner(System.in);
 
     public static void printMenu() {
-
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Calendar cal = Calendar.getInstance();
-
         System.out.println(dateFormat.format(cal.getTime()));
         System.out.println("1- Teacher/Student classes");
         System.out.println("2- Tasks(quiz,exam,exercise)");
@@ -71,56 +69,63 @@ public class Main {
             educationalID = scanner.next();
         } while (fn.isEmpty() || ln.isEmpty() || username.isEmpty() || email.isEmpty() || phonenumber.isEmpty()
                 || pass.isEmpty() || repass.isEmpty() || !pass.equals(repass) || educationalID.isEmpty());
-        System.out.println("To signup please chose your role(Teacher/Student/Official):");
+
+        System.out.println("To signup please chose your role (Teacher/Student/Official):");
         String userRole = scanner.next();
+
         switch (userRole) {
             case "Student" -> {
                 String studyfield;
                 do {
                     System.out.println("Please enter your studyfield :");
                     studyfield = scanner.next();
-                } while (studyfield == null);
+                } while (studyfield.isEmpty());
                 boolean repeat = false;
                 for (Student student : students) {
-                    if (student != null && (student.getEducationalID().equals(educationalID)
-                            || student.getUsername().equals(username) || student.getEmail().equals(email)
-                            || student.getPhonenumber().equals(phonenumber))) {
-                        System.out.println("this user is repetitive :");
+                    if (student.getEducationalID().equals(educationalID)
+                            || student.getUsername().equals(username)
+                            || student.getEmail().equals(email)
+                            || student.getPhonenumber().equals(phonenumber)) {
+                        System.out.println("This user is repetitive.");
                         repeat = true;
                         break;
                     }
                 }
                 if (!repeat) {
-                    students.add(new Student(fn, ln, username, email, phonenumber, userRole, pass, studyfield,
-                            educationalID));
+                    students.add(new Student(fn, ln, username, email, phonenumber, userRole, pass, studyfield, educationalID));
+                    System.out.println("Student signed up successfully.");
                 }
             }
             case "Teacher" -> {
                 boolean repeat = false;
-                for (Teacher te : teachers) {
-                    if (te != null && (te.getUsername().equals(username) || te.getEmail().equals(email)
-                            || te.getPhonenumber().equals(phonenumber))) {
-                        System.out.println("this user is repetitive :");
+                for (Teacher teacher : teachers) {
+                    if (teacher.getUsername().equals(username)
+                            || teacher.getEmail().equals(email)
+                            || teacher.getPhonenumber().equals(phonenumber)) {
+                        System.out.println("This user is repetitive.");
                         repeat = true;
                         break;
                     }
                 }
                 if (!repeat) {
                     teachers.add(new Teacher(fn, ln, username, email, phonenumber, userRole, pass, educationalID));
+                    System.out.println("Teacher signed up successfully.");
                 }
             }
             case "Official" -> {
                 boolean repeat = false;
-                for (Official ofi : officials) {
-                    if (ofi != null && (ofi.getUsername().equals(username) || ofi.getEmail().equals(email)
-                            || ofi.getPhonenumber().equals(phonenumber))) {
-                        System.out.println("this user is repetitive :");
+                for (Official official : officials) {
+                    if (official.getUsername().equals(username)
+                            || official.getEmail().equals(email)
+                            || official.getPhonenumber().equals(phonenumber)) {
+                        System.out.println("This user is repetitive.");
                         repeat = true;
                         break;
                     }
                 }
                 if (!repeat) {
                     officials.add(new Official(fn, ln, username, email, phonenumber, userRole, pass, educationalID));
+                    System.out.println("Official signed up successfully.");
                 }
             }
             default -> System.out.println("Wrong User!");
@@ -128,50 +133,64 @@ public class Main {
     }
 
     private static void Login() {
-        System.out.println("Please enter your role(Teacher/Student/Official):");
+        System.out.println("Please enter your role (Teacher/Student/Official):");
         String userRole = scanner.next();
-        if (userRole.equals("Student")) {
-            String userId = null;
-            while (userId == null) {
-                System.out.println("Please Enter your education Id :");
-                userId = scanner.next();
-            }
-            String userPass = null;
-            while (userPass == null) {
-                System.out.println("Please Enter your password :");
-                userPass = scanner.next();
-            }
-            for (Student student : students) {
-                if (student != null && student.getPass().equals(userPass)
-                        && student.getEducationalID().equals(userId)) {
-                    System.out.println();
-                    System.out.println("Welcome " + student.getUsername());
-                    student.selectmenu();
-                    break;
+        boolean loggedIn = false;
+
+        switch (userRole) {
+            case "Student" -> {
+                System.out.println("Please Enter your education Id:");
+                String userId = scanner.next();
+                System.out.println("Please Enter your password:");
+                String userPass = scanner.next();
+
+                for (Student student : students) {
+                    if (student.getPass().equals(userPass)
+                            && student.getEducationalID().equals(userId)) {
+                        System.out.println("Welcome " + student.getUsername());
+                        student.selectmenu();
+                        loggedIn = true;
+                        break;
+                    }
                 }
             }
-        } else if (userRole.equals("Teacher")) {
-            String userCode = null;
-            while (userCode == null) {
-                System.out.println("Please Enter your education code :");
-                userCode = scanner.next();
-            }
-            String userPass = null;
-            while (userPass == null) {
-                System.out.println("Please Enter your password :");
-                userPass = scanner.next();
-            }
-            for (Teacher teacher : teachers) {
-                if (teacher != null && teacher.getPass().equals(userPass)
-                        && teacher.getEducationalCode().equals(userCode)) {
-                    System.out.println();
-                    System.out.println("Welcome " + teacher.getUsername());
-                    teacher.selectmenu();
-                    break;
+            case "Teacher" -> {
+                System.out.println("Please Enter your education code:");
+                String userCode = scanner.next();
+                System.out.println("Please Enter your password:");
+                String userPass = scanner.next();
+
+                for (Teacher teacher : teachers) {
+                    if (teacher.getPass().equals(userPass)
+                            && teacher.getEducationalCode().equals(userCode)) {
+                        System.out.println("Welcome " + teacher.getUsername());
+                        teacher.selectmenu();
+                        loggedIn = true;
+                        break;
+                    }
                 }
             }
-        } else {
-            System.out.println("Wrong User!");
+            case "Official" -> {
+                System.out.println("Please Enter your educational code:");
+                String userCode = scanner.next();
+                System.out.println("Please Enter your password:");
+                String userPass = scanner.next();
+
+                for (Official official : officials) {
+                    if (official.getPass().equals(userPass)
+                            && official.getEducationalCode().equals(userCode)) {
+                        System.out.println("Welcome " + official.getUsername());
+                        official.selectmenu();
+                        loggedIn = true;
+                        break;
+                    }
+                }
+            }
+            default -> System.out.println("Wrong User!");
+        }
+
+        if (!loggedIn) {
+            System.out.println("Login failed. Please check your credentials.");
         }
     }
 
@@ -181,4 +200,3 @@ public class Main {
         }
     }
 }
-
