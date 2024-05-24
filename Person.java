@@ -17,7 +17,7 @@ public abstract class Person {
     private String educationalID;
 
 
-    public Person(String firstName, String lastname, String username, String email, String phoneNumber, String role, String pass,String educationalID) {
+    public Person(String firstName, String lastname, String username, String email, String phoneNumber, String role, String pass, String educationalID) {
         try {
             this.setFirstname(firstName);
         } catch (Exceptions.InvalidFNException e) {
@@ -48,7 +48,7 @@ public abstract class Person {
         } catch (Exceptions.InvalidPassException e) {
             throw new RuntimeException(e);
         }
-        setRole(role);
+        this.setRole(role);
         try {
             this.setEducationalID(educationalID);
         } catch (Exceptions.InvalidIDException e) {
@@ -118,14 +118,6 @@ public abstract class Person {
         }
     }
 
-    public String getRole() {
-        return this.role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
     public String getPass() {
         return pass;
     }
@@ -138,12 +130,20 @@ public abstract class Person {
         }
     }
 
+    public String getRole() {
+        return this.role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
     public String getEducationalID() {
         return educationalID;
     }
 
     public void setEducationalID(String educationalID) throws Exceptions.InvalidIDException {
-        if (isValidId(educationalID, getRole())) {
+        if (isValidId(educationalID, this.getRole())) {
             this.educationalID = educationalID;
             System.out.println("ID Processed");
         } else {

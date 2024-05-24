@@ -46,8 +46,8 @@ public class Main {
         String phoneNumber;
         String pass;
         String repass;
-        String educationalID;
         String userRole;
+        String educationalID;
         do {
             System.out.println("Please enter your firstname :");
             fn = scanner.next();
@@ -85,7 +85,7 @@ public class Main {
                     }
                 }
                 if (!repeat) {
-                    students.add(new Student(fn, ln, username, email, phoneNumber, userRole, pass, studyField, educationalID));
+                    students.add(new Student(fn, ln, username, email, phoneNumber, userRole, pass, educationalID, studyField));
                     System.out.println("Student signed up successfully.");
                 }
             }
