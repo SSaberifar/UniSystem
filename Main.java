@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Main {
-    public static List<Official> officials = new ArrayList<>();
-    public static List<Teacher> teachers = new ArrayList<>();
-    public static List<Student> students = new ArrayList<>();
+    public static List<Official> officials = new ArrayList<>(3);
+    public static List<Teacher> teachers = new ArrayList<>(5);
+    public static List<Student> students = new ArrayList<>(10);
     static Scanner scanner = new Scanner(System.in);
 
     public static void printMenu() {
@@ -23,21 +23,18 @@ public class Main {
         System.out.println();
     }
 
-    public static void firstmenu() {
+    public static void firstMenu() {
         System.out.println("1 - Login");
         System.out.println("2 - SignUp");
         System.out.println("Please enter your function number:");
         int function = scanner.nextInt();
-        setFunction(function);
-    }
-
-    public static void setFunction(int number) {
-        if (number == 1) {
+        if (function == 1) {
             Login();
-        } else if (number == 2) {
+        } else if (function == 2) {
             SignUp();
         } else {
-            System.out.println("Wrong Number!");
+            System.out.println("Invalid input! Please enter 1 or 2.");
+            firstMenu();
         }
     }
 
@@ -46,10 +43,11 @@ public class Main {
         String ln;
         String username;
         String email;
-        String phonenumber;
+        String phoneNumber;
         String pass;
         String repass;
         String educationalID;
+        String userRole;
         do {
             System.out.println("Please enter your firstname :");
             fn = scanner.next();
@@ -59,72 +57,63 @@ public class Main {
             username = scanner.next();
             System.out.println("Please enter your email :");
             email = scanner.next();
-            System.out.println("Please enter your phonenumber :");
-            phonenumber = scanner.next();
+            System.out.println("Please enter your phone number :");
+            phoneNumber = scanner.next();
             System.out.println("Please enter your pass :");
             pass = scanner.next();
             System.out.println("Please enter your pass again :");
             repass = scanner.next();
+            System.out.println("Please choose your role (Teacher/Student/Official):");
+            userRole = scanner.next();
             System.out.println("Please enter your educationalID :");
             educationalID = scanner.next();
-        } while (fn.isEmpty() || ln.isEmpty() || username.isEmpty() || email.isEmpty() || phonenumber.isEmpty()
-                || pass.isEmpty() || repass.isEmpty() || !pass.equals(repass) || educationalID.isEmpty());
-
-        System.out.println("To signup please chose your role (Teacher/Student/Official):");
-        String userRole = scanner.next();
+        } while (fn.isEmpty() || ln.isEmpty() || username.isEmpty() || email.isEmpty() || phoneNumber.isEmpty() || pass.isEmpty() || repass.isEmpty() || !pass.equals(repass) || educationalID.isEmpty() || userRole.isEmpty());
 
         switch (userRole) {
             case "Student" -> {
-                String studyfield;
+                String studyField;
                 do {
-                    System.out.println("Please enter your studyfield :");
-                    studyfield = scanner.next();
-                } while (studyfield.isEmpty());
+                    System.out.println("Please enter your study field :");
+                    studyField = scanner.next();
+                } while (studyField.isEmpty());
                 boolean repeat = false;
                 for (Student student : students) {
-                    if (student.getEducationalID().equals(educationalID)
-                            || student.getUsername().equals(username)
-                            || student.getEmail().equals(email)
-                            || student.getPhonenumber().equals(phonenumber)) {
+                    if (student.getEducationalID().equals(educationalID) || student.getUsername().equals(username) || student.getEmail().equals(email) || student.getPhoneNumber().equals(phoneNumber)) {
                         System.out.println("This user is repetitive.");
                         repeat = true;
                         break;
                     }
                 }
                 if (!repeat) {
-                    students.add(new Student(fn, ln, username, email, phonenumber, userRole, pass, studyfield, educationalID));
+                    students.add(new Student(fn, ln, username, email, phoneNumber, userRole, pass, studyField, educationalID));
                     System.out.println("Student signed up successfully.");
                 }
             }
             case "Teacher" -> {
                 boolean repeat = false;
                 for (Teacher teacher : teachers) {
-                    if (teacher.getUsername().equals(username)
-                            || teacher.getEmail().equals(email)
-                            || teacher.getPhonenumber().equals(phonenumber)) {
+                    if (teacher.getUsername().equals(username) || teacher.getEmail().equals(email) || teacher.getPhoneNumber().equals(phoneNumber)) {
                         System.out.println("This user is repetitive.");
                         repeat = true;
                         break;
                     }
                 }
                 if (!repeat) {
-                    teachers.add(new Teacher(fn, ln, username, email, phonenumber, userRole, pass, educationalID));
+                    teachers.add(new Teacher(fn, ln, username, email, phoneNumber, userRole, pass, educationalID));
                     System.out.println("Teacher signed up successfully.");
                 }
             }
             case "Official" -> {
                 boolean repeat = false;
                 for (Official official : officials) {
-                    if (official.getUsername().equals(username)
-                            || official.getEmail().equals(email)
-                            || official.getPhonenumber().equals(phonenumber)) {
+                    if (official.getUsername().equals(username) || official.getEmail().equals(email) || official.getPhoneNumber().equals(phoneNumber)) {
                         System.out.println("This user is repetitive.");
                         repeat = true;
                         break;
                     }
                 }
                 if (!repeat) {
-                    officials.add(new Official(fn, ln, username, email, phonenumber, userRole, pass, educationalID));
+                    officials.add(new Official(fn, ln, username, email, phoneNumber, userRole, pass, educationalID));
                     System.out.println("Official signed up successfully.");
                 }
             }
@@ -135,37 +124,32 @@ public class Main {
     private static void Login() {
         System.out.println("Please enter your role (Teacher/Student/Official):");
         String userRole = scanner.next();
-        boolean loggedIn = false;
 
         switch (userRole) {
             case "Student" -> {
-                System.out.println("Please Enter your education Id:");
+                System.out.println("Please Enter your education ID:");
                 String userId = scanner.next();
                 System.out.println("Please Enter your password:");
                 String userPass = scanner.next();
 
                 for (Student student : students) {
-                    if (student.getPass().equals(userPass)
-                            && student.getEducationalID().equals(userId)) {
+                    if (student.getPass().equals(userPass) && student.getEducationalID().equals(userId)) {
                         System.out.println("Welcome " + student.getUsername());
-                        student.selectmenu();
-                        loggedIn = true;
+                        student.selectMenu();
                         break;
                     }
                 }
             }
             case "Teacher" -> {
-                System.out.println("Please Enter your education code:");
+                System.out.println("Please Enter your education ID:");
                 String userCode = scanner.next();
                 System.out.println("Please Enter your password:");
                 String userPass = scanner.next();
 
                 for (Teacher teacher : teachers) {
-                    if (teacher.getPass().equals(userPass)
-                            && teacher.getEducationalCode().equals(userCode)) {
+                    if (teacher.getPass().equals(userPass) && teacher.getEducationalID().equals(userCode)) {
                         System.out.println("Welcome " + teacher.getUsername());
-                        teacher.selectmenu();
-                        loggedIn = true;
+                        teacher.selectMenu();
                         break;
                     }
                 }
@@ -177,26 +161,20 @@ public class Main {
                 String userPass = scanner.next();
 
                 for (Official official : officials) {
-                    if (official.getPass().equals(userPass)
-                            && official.getEducationalCode().equals(userCode)) {
+                    if (official.getPass().equals(userPass) && official.getEducationalID().equals(userCode)) {
                         System.out.println("Welcome " + official.getUsername());
-                        official.selectmenu();
-                        loggedIn = true;
+                        official.selectMenu();
                         break;
                     }
                 }
             }
             default -> System.out.println("Wrong User!");
         }
-
-        if (!loggedIn) {
-            System.out.println("Login failed. Please check your credentials.");
-        }
     }
 
     public static void main(String[] args) {
-        for (int i = 0; i < 3; i++) {
-            firstmenu();
+        for (int i = 0; i < 5; i++) {
+            firstMenu();
         }
     }
 }

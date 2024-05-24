@@ -7,18 +7,19 @@ public abstract class Person {
 
     Scanner scanner = new Scanner(System.in);
     List<Unit> units = new ArrayList<>(10);
-    private String fisrtname;
+    private String firstName;
     private String lastname;
     private String username;
     private String email;
-    private String phonenumber;
+    private String phoneNumber;
     private String role;
     private String pass;
+    private String educationalID;
 
 
-    public Person(String fisrtname, String lastname, String username, String email, String phonenumber, String role, String pass) {
+    public Person(String firstName, String lastname, String username, String email, String phoneNumber, String role, String pass,String educationalID) {
         try {
-            this.setFisrtname(fisrtname);
+            this.setFirstname(firstName);
         } catch (Exceptions.InvalidFNException e) {
             throw new RuntimeException(e);
         }
@@ -38,7 +39,7 @@ public abstract class Person {
             throw new RuntimeException(e);
         }
         try {
-            this.setPhonenumber(phonenumber);
+            this.setPhoneNumber(phoneNumber);
         } catch (Exceptions.InvalidPhoneException e) {
             throw new RuntimeException(e);
         }
@@ -47,18 +48,23 @@ public abstract class Person {
         } catch (Exceptions.InvalidPassException e) {
             throw new RuntimeException(e);
         }
-        this.setRole(role);
+        setRole(role);
+        try {
+            this.setEducationalID(educationalID);
+        } catch (Exceptions.InvalidIDException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     ////////////////////setter&getter/////////////////
 
-    public String getFisrtname() {
-        return fisrtname;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFisrtname(String fn) throws Exceptions.InvalidFNException {
+    public void setFirstname(String fn) throws Exceptions.InvalidFNException {
         if (isValidString(fn)) {
-            this.fisrtname = fn;
+            this.firstName = fn;
         } else {
             throw new Exceptions.InvalidFNException("please enter valid first name");
         }
@@ -100,20 +106,20 @@ public abstract class Person {
         }
     }
 
-    public String getPhonenumber() {
-        return phonenumber;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setPhonenumber(String phonenumber) throws Exceptions.InvalidPhoneException {
-        if (Pattern.matches("^09\\d{9}$", phonenumber)) {
-            this.phonenumber = phonenumber;
+    public void setPhoneNumber(String phoneNumber) throws Exceptions.InvalidPhoneException {
+        if (Pattern.matches("^09\\d{9}$", phoneNumber)) {
+            this.phoneNumber = phoneNumber;
         } else {
             throw new Exceptions.InvalidPhoneException("please enter valid phone number");
         }
     }
 
     public String getRole() {
-        return role;
+        return this.role;
     }
 
     public void setRole(String role) {
@@ -132,6 +138,19 @@ public abstract class Person {
         }
     }
 
+    public String getEducationalID() {
+        return educationalID;
+    }
+
+    public void setEducationalID(String educationalID) throws Exceptions.InvalidIDException {
+        if (isValidId(educationalID, getRole())) {
+            this.educationalID = educationalID;
+            System.out.println("ID Processed");
+        } else {
+            throw new Exceptions.InvalidIDException("please enter valid student id");
+        }
+    }
+
     ////////////////////methods/////////////////
 
     public boolean isValidString(String input) {
@@ -147,44 +166,44 @@ public abstract class Person {
         };
     }
 
-    public abstract void showclasses();
+    public abstract void showClasses();
 
-    protected abstract void showtasks();
+    protected abstract void showTasks();
 
-    public abstract void shownotif();
+    public abstract void showNotification();
 
     public void showInfo() {
-        System.out.println(getFisrtname());
+        System.out.println(getFirstName());
         System.out.println(getLastname());
         System.out.println(getEmail());
-        System.out.println(getPhonenumber());
+        System.out.println(getPhoneNumber());
         System.out.println(getPass());
         System.out.println();
     }
 
-    public void selectmenu() {
+    public void selectMenu() {
         Main.printMenu();
-        System.out.println("Please enter your operation:");
+        System.out.println("Please enter your operation number:");
         int ope = scanner.nextInt();
         switch (ope) {
             case 1:
-                showclasses();
-                selectmenu();
+                showClasses();
+                selectMenu();
                 break;
             case 2:
-                showtasks();
-                selectmenu();
+                showTasks();
+                selectMenu();
                 break;
             case 3:
-                shownotif();
-                selectmenu();
+                showNotification();
+                selectMenu();
                 break;
             case 4:
                 showInfo();
-                selectmenu();
+                selectMenu();
                 break;
             case 5:
-                Main.firstmenu();
+                Main.firstMenu();
                 break;
         }
     }

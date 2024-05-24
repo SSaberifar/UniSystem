@@ -1,40 +1,22 @@
 public class Official extends Person {
-    private String educationalCode;
 
-    public Official(String fisrtname, String lastname, String username, String email, String phonenumber, String role, String pass, String educationalCode) {
-        super(fisrtname, lastname, username, email, phonenumber, role, pass);
-        try {
-            this.setEducationalCode(educationalCode);
-        } catch (Exceptions.InvalidIDException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
-    public String getEducationalCode() {
-        return educationalCode;
-    }
-
-    public void setEducationalCode(String educationalCode) throws Exceptions.InvalidIDException {
-        if (super.isValidId(educationalCode, getRole())) {
-            this.educationalCode = educationalCode;
-            System.out.println("ID Processed");
-        } else {
-            throw new Exceptions.InvalidIDException("please enter valid educational code");
-        }
+    public Official(String firstName, String lastname, String username, String email, String phoneNumber, String role, String pass, String educationalID) {
+        super(firstName, lastname, username, email, phoneNumber, role, pass, educationalID);
     }
 
     @Override
-    public void showclasses() {
+    public void showClasses() {
 
     }
 
     @Override
-    protected void showtasks() {
+    protected void showTasks() {
 
     }
 
     @Override
-    public void shownotif() {
+    public void showNotification() {
 
     }
 }
