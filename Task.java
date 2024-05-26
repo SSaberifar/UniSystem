@@ -40,7 +40,7 @@ public abstract class Task{
             System.out.println("date can't be empty!");
             setDeadline(scanner.next());
         } else {
-            SimpleDateFormat sdf = new SimpleDateFormat("hh:mm");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
             try {
                 this.deadline = sdf.parse(deadline);
             } catch (ParseException e) {

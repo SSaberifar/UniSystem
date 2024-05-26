@@ -28,7 +28,7 @@ public class Question extends Task {
 
     public void setAnswertext(String answertext) {
         if (!answertext.isEmpty()) {
-            this.questiontext = answertext;
+            this.answertext = answertext;
         } else {
             System.out.println("answer can't be empty!");
             setAnswertext(scanner.next());
@@ -43,7 +43,7 @@ public class Question extends Task {
     }
 
     public String getFdate(){
-        Format formatter = new SimpleDateFormat("hh:mm");
+        Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         return formatter.format(super.getDeadlineDate());
     }
 }

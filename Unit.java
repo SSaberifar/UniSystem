@@ -1,7 +1,7 @@
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -23,7 +23,6 @@ public class Unit {
 
     // Methods
     public void AddQuestion(String deadline, String taskname, String questiontext, String answertext) {
-
         if (!deadline.isEmpty() && !taskname.isEmpty() && !questiontext.isEmpty() && !answertext.isEmpty()) {
             tasks.add(new Question(deadline, questiontext, answertext,taskname, this,this.teacher));
             System.out.println("question added , do you want to add another question?y/n");
@@ -64,13 +63,15 @@ public class Unit {
     }
 
     public boolean getQuestionState(String deadline) {
-        LocalDateTime finishtime= LocalDateTime.parse(deadline);
-        Duration duration = Duration.between(LocalDateTime.now(),finishtime);
-        if ( finishtime.isAfter(LocalDateTime.now())){
-            System.out.println("You have "+duration.toHours()+" hours and "+duration.toMinutes()+" minutes time for this question");
+        // Use a date-time formatter to parse the deadline string
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime finishtime = LocalDateTime.parse(deadline, formatter);
+        Duration duration = Duration.between(LocalDateTime.now(), finishtime);
+        if (finishtime.isAfter(LocalDateTime.now())) {
+            System.out.println("You have " + duration.toHours() + " hours and " + duration.toMinutes() % 60 + " minutes time for this question");
             return true;
         } else {
-            System.out.println(duration.toHours()+"hours and "+duration.toMinutes()+" minutes have pass since the homework deadline!");
+            System.out.println(duration.toHours() + " hours and " + duration.toMinutes() % 60 + " minutes have passed since the homework deadline!");
             return false;
         }
     }
