@@ -7,11 +7,10 @@ public class Question extends Task {
     Scanner scanner = new Scanner(System.in);
     private String questiontext;
     private String answertext;
-    private final boolean done = false;
 
     // Constructor
     public Question(String deadline, String questiontext, String answertext, String taskname,Unit unit, Teacher teacher) {
-        super(deadline, taskname, unit,teacher);
+        super(deadline, taskname, teacher,unit);
         setQuestiontext(questiontext);
         setAnswertext(answertext);
     }

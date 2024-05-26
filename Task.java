@@ -3,20 +3,36 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
 
-public abstract class Task extends Unit{
+public abstract class Task{
     Scanner scanner = new Scanner(System.in);
 
-    private Date deadline;
-    private Date remaining_time;
-    private String taskname;
-    private final Unit unit;
+    protected Date deadline;
+    protected String taskname;
+    protected Teacher taskTeacher;
+    protected Unit taskUnit;
 
     // Constructor
-    public Task(String deadline, String taskname,Unit unit, Teacher teacher) {
-        super();
+    public Task(String deadline, String taskname,Teacher taskTeacher,Unit taskUnit) {
         setName(taskname);
         setDeadline(deadline);
-        this.unit = unit;
+        setTaskTeacher(taskTeacher);
+        setTaskUnit(taskUnit);
+    }
+
+    public Unit getTaskUnit() {
+        return taskUnit;
+    }
+
+    public void setTaskUnit(Unit taskUnit) {
+        this.taskUnit = taskUnit;
+    }
+
+    public Teacher getTaskTeacher() {
+        return taskTeacher;
+    }
+
+    public void setTaskTeacher(Teacher taskTeacher) {
+        this.taskTeacher = taskTeacher;
     }
 
     private void setDeadline(String deadline) {

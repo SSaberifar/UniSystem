@@ -14,6 +14,22 @@ public class Teacher extends Person {
 
     ////////////////////methods/////////////////
 
+    public void AddQuestion(String deadline, String taskname, String questiontext, String answertext,Unit unit) {
+        if (!deadline.isEmpty() && !taskname.isEmpty() && !questiontext.isEmpty() && !answertext.isEmpty()) {
+            unit.tasks.add(new Question(deadline, questiontext, answertext,taskname, unit,this));
+            System.out.println("question added , do you want to add another question?y/n");
+            if (scanner.next().charAt(0) == 'y') {
+                System.out.println("enter date, then question name ,text and answer");
+                AddQuestion(scanner.next(), scanner.next(), scanner.next(), scanner.next(),unit);
+            }
+        } else {
+            System.out.println("deadline and question name can't be empty , do you want try again?y/n");
+            if (scanner.next().charAt(0) == 'y') {
+                System.out.println("enter date, then question name ,text and answer");
+                AddQuestion(scanner.next(), scanner.next(), scanner.next(), scanner.next(),unit);
+            }
+        }
+    }
     public void AddQuiz() {
         System.out.println("Enter unit name");
         String unitName = scanner.next();
@@ -133,6 +149,7 @@ public class Teacher extends Person {
         }
     }
 
+
     @Override
     public void showClasses() {
         if (units.isEmpty()) {
@@ -202,26 +219,23 @@ public class Teacher extends Person {
             System.out.println("You dont have any unit");
             selectMenu();
         } else {
-
-        }
-        for ( Unit unit : units){
-
-            System.out.println("unit "+unit.getName()+" tasks :");
-            for (Quiz quiz : unit.getQuizzes()){
-                if (quiz != null){
-                    System.out.println("Quiz name : "+quiz.getName()+" deadline : "+quiz.getFdate());
+            for (Unit unit : units){
+                System.out.println("unit "+unit.getName()+" tasks :");
+                for (Task task: unit.tasks){
+                    if(task instanceof Quiz quizInstance){
+                        System.out.println("Quiz name : "+quizInstance.getName()+" deadline : "+quizInstance.getFdate());
+                    }
                 }
-            }
-            System.out.println("---------------------------");
-            for ( Question question : unit.getQuestions() ){
-                if ( question != null ) {
-                    System.out.println("problem text : "+question.getQuestiontext()+", answer text : "+question.getAnswertext()+ "\t deadline : "+question.getFdate());
-                    if ( !unit.getQuestionState(question.getFdate()) ) {
-                        System.out.println("Students answers are ready!");
+                System.out.println("---------------------------");
+                for (Task task: unit.tasks){
+                    if(task instanceof Question question){
+                        System.out.println("problem text : "+question.getQuestiontext()+", answer text : "+question.getAnswertext()+ "\t deadline : "+question.getFdate());
+                        if ( !unit.getQuestionState(question.getFdate()) ) {
+                            System.out.println("Students answers are ready!");
+                        }
                     }
                 }
             }
-            System.out.println("---------------------------");
         }
     }
 
@@ -253,17 +267,17 @@ public class Teacher extends Person {
         selectMenu();
     }
 
-    public void Correcting(String unitname ) {
-
-        for (Unit unit : units){
-            if (unit.getName().equals(unitname)){
-
-            }
-        }
-        System.out.println("Correct students answers :");
-        if ()
-        do {
-
-        }
-    }
+//    public void Correcting(String unitname) {
+//
+//        for (Unit unit : units){
+//            if (unit.getName().equals(unitname)){
+//
+//            }
+//        }
+//        System.out.println("Correct students answers :");
+//        if ()
+//        do {
+//
+//        }
+//    }
 }

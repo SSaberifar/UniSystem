@@ -11,10 +11,7 @@ public class Unit {
     String unitname;
     List<Student> students = new ArrayList<>(10);
     List<String> notifications = new ArrayList<>(10);
-    List<Question> questions = new ArrayList<>();
-
     List<Task> tasks = new ArrayList<>(20);
-    List<Quiz> quizzes = new ArrayList<>();
     private int currentquize = 0;
     private Teacher teacher;
 
@@ -25,20 +22,20 @@ public class Unit {
     public Unit(){}
 
     // Methods
-    public void AddQuestion(String deadline, String taskname, String questiontext, String answertext, Unit unit) {
+    public void AddQuestion(String deadline, String taskname, String questiontext, String answertext) {
 
         if (!deadline.isEmpty() && !taskname.isEmpty() && !questiontext.isEmpty() && !answertext.isEmpty()) {
-            questions.add(new Question(deadline, questiontext, answertext,taskname, this,this.teacher));
+            tasks.add(new Question(deadline, questiontext, answertext,taskname, this,this.teacher));
             System.out.println("question added , do you want to add another question?y/n");
             if (scanner.next().charAt(0) == 'y') {
                 System.out.println("enter date, then question name ,text and answer");
-                AddQuestion(scanner.next(), scanner.next(), scanner.next(), scanner.next(), this);
+                AddQuestion(scanner.next(), scanner.next(), scanner.next(), scanner.next());
             }
         } else {
             System.out.println("deadline and question name can't be empty , do you want try again?y/n");
             if (scanner.next().charAt(0) == 'y') {
                 System.out.println("enter date, then question name ,text and answer");
-                AddQuestion(scanner.next(), scanner.next(), scanner.next(), scanner.next(), this);
+                AddQuestion(scanner.next(), scanner.next(), scanner.next(), scanner.next());
             }
         }
     }
@@ -48,16 +45,18 @@ public class Unit {
             System.out.println("start/deadline date and quiz date/name can't be empty! try again");
             AddQuiz(scanner.next(), scanner.next(), scanner.next(), scanner.next());
         } else {
-            quizzes.add(new Quiz(startdate, quiztime, deadline, quizname, this, this.teacher));
+            tasks.add(new Quiz(startdate, quiztime, deadline, quizname, this, this.teacher));
             currentquize++;
             boolean repeat;
             do {
                 repeat = false;
                 System.out.println("enter your questions and answers :");
-                quizzes.get(currentquize).setProblem_answers(scanner.next(), scanner.next());
-                System.out.println("question and answer add successfully do you want to add another problem?(y/n))");
-                if (scanner.next().charAt(0) == 'y') {
-                    repeat = true;
+                if(tasks.get(currentquize) instanceof Quiz quizInstance){
+                    quizInstance.setProblem_answers(scanner.next(), scanner.next());
+                    System.out.println("question and answer add successfully do you want to add another problem?(y/n))");
+                    if (scanner.next().charAt(0) == 'y') {
+                        repeat = true;
+                    }
                 }
             } while (repeat);
 
@@ -107,14 +106,12 @@ public class Unit {
         }
     }
 
-    public List<Quiz> getQuizzes() {
-        return this.quizzes;
-    }
-    public List<Question> getQuestions(){
-        return this.questions;
+    public List<Task> getTasks() {
+        return this.tasks;
     }
 
     public String getName(){
         return this.unitname;
     }
+
 }

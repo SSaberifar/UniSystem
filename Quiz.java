@@ -13,7 +13,7 @@ public class Quiz extends Task {
     private final HashMap<String, String> problem_answers = new HashMap<>();
 
     public Quiz(String startdate, String quiztime,String deadline, String taskname, Unit unit, Teacher teacher) {
-        super(deadline,taskname,unit,teacher);
+        super(deadline,taskname,teacher,unit);
         setStartdate(startdate);
         setQuiztime(quiztime);
     }
