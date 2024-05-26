@@ -4,22 +4,18 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 
-public class Quiz extends Unit {
+public class Quiz extends Task {
 
     private Date startdate;
-    private Date finishdate;
     private Date quiztime;
-    private final Unit unit;
 
 
     private final HashMap<String, String> problem_answers = new HashMap<>();
 
-    public Quiz(String startdate, String quiztime, String finishdate, String taskname, Teacher teacher, Unit unit) {
-        super(taskname, teacher);
+    public Quiz(String startdate, String quiztime,String deadline, String taskname, Unit unit, Teacher teacher) {
+        super(deadline,taskname,unit,teacher);
         setStartdate(startdate);
         setQuiztime(quiztime);
-        setFinishdate(finishdate);
-        this.unit = unit;
     }
 
     public void setProblem_answers(String problem, String answer) {
@@ -60,23 +56,23 @@ public class Quiz extends Unit {
         }
     }
 
-    private void setFinishdate(String fdate) {
+    private void setDeadline(String fdate) {
         if (fdate.isEmpty()) {
-            System.out.println("finish date can't be empty!try again");
+            System.out.println("deadline can't be empty!try again");
         } else {
             SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm");
             try {
-                this.finishdate = sdf.parse(fdate);
+                this.deadline = sdf.parse(fdate);
             } catch (ParseException e) {
-                System.out.println("finish date and time is incorrect!Day-Month-Year Hours:Minutes");
-                setFinishdate(scanner.next());
+                System.out.println("deadline and time is incorrect!Day-Month-Year Hours:Minutes");
+                setDeadline(scanner.next());
             }
         }
     }
 
     public String getFdate() {
         Format formater = new SimpleDateFormat("dd-MM-yyyy hh:mm");
-        return formater.format(this.finishdate);
+        return formater.format(super.getDeadlineDate());
     }
 
 }

@@ -1,3 +1,6 @@
+import java.text.Format;
+import java.text.Normalizer;
+import java.text.SimpleDateFormat;
 import java.util.Scanner;
 
 public class Question extends Task {
@@ -7,8 +10,8 @@ public class Question extends Task {
     private final boolean done = false;
 
     // Constructor
-    public Question(String deadline, String name, String questiontext, String answertext, Unit unit) {
-        super(deadline, name, unit);
+    public Question(String deadline, String questiontext, String answertext, String taskname,Unit unit, Teacher teacher) {
+        super(deadline, taskname, unit,teacher);
         setQuestiontext(questiontext);
         setAnswertext(answertext);
     }
@@ -33,4 +36,15 @@ public class Question extends Task {
         }
     }
 
+    public String getQuestiontext(){
+        return this.questiontext;
+    }
+    public String getAnswertext(){
+        return this.answertext;
+    }
+
+    public String getFdate(){
+        Format formatter = new SimpleDateFormat("hh:mm");
+        return formatter.format(super.getDeadlineDate());
+    }
 }

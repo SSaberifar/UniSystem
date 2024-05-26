@@ -3,18 +3,18 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
 
-public abstract class Task {
+public abstract class Task extends Unit{
     Scanner scanner = new Scanner(System.in);
 
     private Date deadline;
     private Date remaining_time;
-    private String name;
+    private String taskname;
     private final Unit unit;
 
-
     // Constructor
-    public Task(String deadline, String name, Unit unit) {
-        setName(name);
+    public Task(String deadline, String taskname,Unit unit, Teacher teacher) {
+        super();
+        setName(taskname);
         setDeadline(deadline);
         this.unit = unit;
     }
@@ -35,20 +35,20 @@ public abstract class Task {
     }
 
     public String getName() {
-        return this.name;
+        return this.taskname;
     }
 
     // Setter And Getter
     private void setName(String name) {
         if (!name.isEmpty()) {
-            this.name = name;
+            this.taskname = name;
         } else {
             System.out.println("Enter valid name for this task");
             setName(scanner.next());
         }
     }
 
-    public Date getDeadline(){
+    public Date getDeadlineDate(){
         return this.deadline;
     }
 }

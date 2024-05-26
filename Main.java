@@ -16,7 +16,7 @@ public class Main {
         Calendar cal = Calendar.getInstance();
         System.out.println(dateFormat.format(cal.getTime()));
         System.out.println("1- Teacher/Student classes");
-        System.out.println("2- Tasks(quiz,exam,exercise)");
+        System.out.println("2- Tasks(quiz,exercise)");
         System.out.println("3- notifications");
         System.out.println("4- user profile");
         System.out.println("5- back");
@@ -87,6 +87,7 @@ public class Main {
                 if (!repeat) {
                     students.add(new Student(fn, ln, username, email, phoneNumber, userRole, pass, educationalID, studyField));
                     System.out.println("Student signed up successfully.");
+
                 }
             }
             case "Teacher" -> {

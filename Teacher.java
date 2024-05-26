@@ -1,3 +1,6 @@
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.util.Queue;
 import java.util.Scanner;
 
 public class Teacher extends Person {
@@ -32,7 +35,7 @@ public class Teacher extends Person {
             String quizName = scanner.next();
             scanner.nextLine(); // Consume the remaining newline
             units.get(unitIndex).AddQuiz(startDate, quizTime, finishDate, quizName);
-            Main.firstMenu();
+            Main.printMenu();
         } else {
             System.out.println("invalid unit name! do you want try again?y/n");
             if (scanner.next().charAt(0) == 'y') {
@@ -40,7 +43,7 @@ public class Teacher extends Person {
                 AddQuiz();
             } else {
                 System.out.println("Please enter your function number:");
-                Main.firstMenu();
+                Main.printMenu();
             }
         }
     }
@@ -195,7 +198,31 @@ public class Teacher extends Person {
 
     @Override
     protected void showTasks() {
-        // Implementation for showing tasks
+        if (units.isEmpty()){
+            System.out.println("You dont have any unit");
+            selectMenu();
+        } else {
+
+        }
+        for ( Unit unit : units){
+
+            System.out.println("unit "+unit.getName()+" tasks :");
+            for (Quiz quiz : unit.getQuizzes()){
+                if (quiz != null){
+                    System.out.println("Quiz name : "+quiz.getName()+" deadline : "+quiz.getFdate());
+                }
+            }
+            System.out.println("---------------------------");
+            for ( Question question : unit.getQuestions() ){
+                if ( question != null ) {
+                    System.out.println("problem text : "+question.getQuestiontext()+", answer text : "+question.getAnswertext()+ "\t deadline : "+question.getFdate());
+                    if ( !unit.getQuestionState(question.getFdate()) ) {
+                        System.out.println("Students answers are ready!");
+                    }
+                }
+            }
+            System.out.println("---------------------------");
+        }
     }
 
     @Override
@@ -224,5 +251,19 @@ public class Teacher extends Person {
             }
         }
         selectMenu();
+    }
+
+    public void Correcting(String unitname ) {
+
+        for (Unit unit : units){
+            if (unit.getName().equals(unitname)){
+
+            }
+        }
+        System.out.println("Correct students answers :");
+        if ()
+        do {
+
+        }
     }
 }
