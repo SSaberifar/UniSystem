@@ -7,6 +7,7 @@ public class Question extends Task {
     Scanner scanner = new Scanner(System.in);
     private String questiontext;
     private String answertext;
+    private String studentanswer;
 
     // Constructor
     public Question(String deadline, String questiontext, String answertext, String taskname,Unit unit, Teacher teacher) {
@@ -15,6 +16,12 @@ public class Question extends Task {
         setAnswertext(answertext);
     }
 
+    public void AnswerToQuestion(){
+        System.out.println("problem : \n"+questiontext +"\n enter your answer : ");
+        String answer = scanner.nextLine();
+        studentanswer = answer;
+        System.out.println("your answer saved successfully");
+    }
     // Setter And Getters
 
     public void setQuestiontext(String text) {

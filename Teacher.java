@@ -41,13 +41,14 @@ public class Teacher extends Person {
             unitIndex++;
         }
         if (validUnit) {
-            System.out.println("Enter start date, quiz time, finish date and quiz name:");
+            System.out.println("Enter start date, quiz time, finish date and quiz name and score:");
             String startDate = scanner.next();
             String quizTime = scanner.next();
             String finishDate = scanner.next();
             String quizName = scanner.next();
+            int score = scanner.nextInt();
             scanner.nextLine(); // Consume the newline
-            units.get(unitIndex).AddQuiz(startDate, quizTime, finishDate, quizName);
+            units.get(unitIndex).AddQuiz(startDate, quizTime, finishDate, quizName,score);
             Main.printMenu();
         } else {
             System.out.println("invalid unit name! do you want try again?y/n");
@@ -252,7 +253,7 @@ public class Teacher extends Person {
                 for (Task task : unit.tasks) {
                     if (task instanceof Question question) {
                         System.out.println("problem text : " + question.getQuestiontext() + " answer text : " + question.getAnswertext() + " deadline : " + question.getFdate());
-                        if (!unit.getQuestionState(question.getFdate())) {
+                        if (!unit.getTimeState(question.getFdate())) {
                             System.out.println("Students answers are ready!");
                         }
                     }
@@ -289,17 +290,17 @@ public class Teacher extends Person {
         selectMenu();
     }
 
-//    public void Correcting(String unitname) {
-//
-//        for (Unit unit : units){
-//            if (unit.getName().equals(unitname)){
-//
-//            }
-//        }
-//        System.out.println("Correct students answers :");
-//        if ()
-//        do {
-//
-//        }
-//    }
+    public void Correcting(String unitname , String taskname) {
+
+        for (Unit unit : units){
+            if (unit.getName().equals(unitname)){
+                for (Task task : unit.tasks){
+                    if (task.equals(task) && task instanceof Quiz quiz ){
+
+                    }
+                }
+            }
+        }
+        System.out.println("Correct students answers :");
+    }
 }

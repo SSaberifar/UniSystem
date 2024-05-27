@@ -1,21 +1,30 @@
 import java.text.Format;
+import java.text.Normalizer;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.function.LongConsumer;
 
 public class Quiz extends Task {
 
     private Date startdate;
     private Date quiztime;
 
+    private int score;
 
-    private final HashMap<String, String> problem_answers = new HashMap<>();
 
-    public Quiz(String startdate, String quiztime,String deadline, String taskname, Unit unit, Teacher teacher) {
+    private HashMap<String, String> problem_answers = new HashMap<>();
+    private HashMap<String, String> problem_student = new HashMap<>();
+
+    public Quiz(String startdate, String quiztime,String deadline, String taskname, Unit unit, Teacher teacher ,int score) {
         super(deadline,taskname,teacher,unit);
         setStartdate(startdate);
         setQuiztime(quiztime);
+        setScore(score);
     }
 
     public void setProblem_answers(String problem, String answer) {
@@ -25,6 +34,29 @@ public class Quiz extends Task {
         } else {
             problem_answers.put(problem, answer);
         }
+    }
+
+    public void AnswerToQuiz() {
+        int index = 0 ;
+        System.out.println("enter answers :");
+        int startminut = LocalDateTime.now().getHour() * 60 + LocalDateTime.now().getMinute();
+        do {
+            System.out.println((""+index+1)+") "+problem_answers.get(problem_answers.get(index))+" : \t\t score : "+score);
+            String answer = scanner.nextLine();
+
+            int answerminut = LocalDateTime.now().getHour() * 60 + LocalDateTime.now().getMinute();
+            int quiztime = Integer.parseInt( getQuizTime().split(":")[0] ) * 60 + Integer.parseInt( getQuizTime().split(":")[1] );
+
+            if ( taskUnit.getTimeState(getQuizTime()) && (answerminut - startminut) < quiztime){
+                problem_student.put( problem_answers.get(index), answer);
+                index++;
+            } else {
+                System.out.println("The exam time is over.");
+                break;
+            }
+
+        } while (index < problem_answers.size());
+        System.out.println("Your answers saved successfully");
     }
 
     private void setStartdate(String date) {
@@ -74,5 +106,21 @@ public class Quiz extends Task {
         Format formater = new SimpleDateFormat("dd-MM-yyyy hh:mm");
         return formater.format(super.getDeadlineDate());
     }
+    public String getSdate() {
+        Format formater = new SimpleDateFormat("dd-MM-yyyy hh:mm");
+        return formater.format(startdate);
+    }
 
+    public String getQuizTime(){
+        Format formatter = new SimpleDateFormat("hh:mm");
+        return formatter.format(quiztime);
+    }
+    public void setScore(int score) {
+        if ( score >= 0) {
+            this.score = score;
+        } else {
+            System.out.println("score number invalid! try again");
+            setScore(scanner.nextInt());
+        }
+    }
 }

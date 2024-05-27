@@ -39,12 +39,12 @@ public class Unit {
         }
     }
 
-    public void AddQuiz(String startdate, String quiztime, String deadline, String quizname) {
+    public void AddQuiz(String startdate, String quiztime, String deadline, String quizname , int score) {
         if (startdate.isEmpty() || quiztime.isEmpty() || deadline.isEmpty() || quizname.isEmpty()) {
             System.out.println("start/deadline date and quiz date/name can't be empty! try again");
-            AddQuiz(scanner.next(), scanner.next(), scanner.next(), scanner.next());
+            AddQuiz(scanner.next(), scanner.next(), scanner.next(), scanner.next() ,scanner.nextInt());
         } else {
-            tasks.add(new Quiz(startdate, quiztime, deadline, quizname, this, this.teacher));
+            tasks.add(new Quiz(startdate, quiztime, deadline, quizname, this, this.teacher ,score));
             currentquize++;
             boolean repeat;
             do {
@@ -62,16 +62,16 @@ public class Unit {
         }
     }
 
-    public boolean getQuestionState(String deadline) {
+    public boolean getTimeState(String deadline) {
         // Use a date-time formatter to parse the deadline string
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         LocalDateTime finishtime = LocalDateTime.parse(deadline, formatter);
         Duration duration = Duration.between(LocalDateTime.now(), finishtime);
         if (finishtime.isAfter(LocalDateTime.now())) {
-            System.out.println("You have " + duration.toHours() + " hours and " + duration.toMinutes() % 60 + " minutes time for this question");
+            System.out.println("You have " + duration.toHours() + " hours and " + duration.toMinutes() % 60 + " minutes time");
             return true;
         } else {
-            System.out.println(duration.toHours() + " hours and " + duration.toMinutes() % 60 + " minutes have passed since the homework deadline!");
+            System.out.println(duration.toHours() + " hours and " + duration.toMinutes() % 60 + " minutes have passed the deadline!");
             return false;
         }
     }
