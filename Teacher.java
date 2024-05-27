@@ -1,3 +1,4 @@
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class Teacher extends Person {
@@ -11,8 +12,8 @@ public class Teacher extends Person {
 
     ////////////////////methods/////////////////
 
-    public void AddQuestion(String deadline, String taskname, String questiontext, String answertext, Unit unit) {
-        unit.tasks.add(new Question(deadline, questiontext, answertext, taskname, unit, this));
+    public void AddQuestion(String deadline, String taskname, String questiontext, int answer, Unit unit) {
+        unit.tasks.add(new Question(deadline, questiontext, answer, taskname, unit, this));
         System.out.println("question added , do you want to add another question(y/n)");
         String questionBool = scanner.next();
         if (questionBool.equals("y")) {
@@ -21,7 +22,7 @@ public class Teacher extends Person {
             String queaname = scanner.next();
             scanner.nextLine(); // Consume the newline
             String queatext = scanner.nextLine();
-            String queaans = scanner.nextLine();
+            int queaans = scanner.nextInt();
             AddQuestion(queadead, queaname, queatext, queaans, unit);
         }
         Main.printMenu();
@@ -235,8 +236,8 @@ public class Teacher extends Person {
                         System.out.println("Enter question text:");
                         String questiontext = scanner.nextLine();
                         System.out.println("Enter answer text:");
-                        String answertext = scanner.nextLine();
-                        AddQuestion(deadline, taskname, questiontext, answertext, unit);
+                        int answer = scanner.nextInt();
+                        AddQuestion(deadline, taskname, questiontext, answer, unit);
                     }
                     break;
                 } else {
@@ -295,8 +296,31 @@ public class Teacher extends Person {
         for (Unit unit : units){
             if (unit.getName().equals(unitname)){
                 for (Task task : unit.tasks){
-                    if (task.equals(task) && task instanceof Quiz quiz ){
-
+                    if (task.getName().equals(taskname) && task instanceof Quiz quiz ){
+                        int index =0;
+                        System.out.println("Problems :");
+                        for (String problems : quiz.problem_answers.keySet()){
+                            System.out.println(problems);
+                        }
+                        for (HashMap<Student,String> hashMap : quiz.students_holder){
+                            System.out.println("Student "+ ++index +"answers :");
+                            String studentid = "";
+                            for(Student student : hashMap.keySet()){
+                                System.out.println(hashMap.get(student)+"\n-----------");
+                                studentid = student.getEducationalID();
+                            }
+                            System.out.println("enter student "+studentid+" score :");
+                            int score = scanner.nextInt();
+                            quiz.students_score.put(studentid,score);
+                        }
+                    } else if (task.getName().equals(taskname) && task instanceof Question question) {
+                        System.out.println("question text : "+question.questiontext+"\nAutocorrecting... ");
+                        for (Student student  : question.studentanswer.keySet()){
+                            if (question.answer == question.studentanswer.get(student)){
+                                question.students_score.put(student.getEducationalID(),1);
+                            }
+                        }
+                        System.out.println("Autocorrecting finished . students score save");
                     }
                 }
             }

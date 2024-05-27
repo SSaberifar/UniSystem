@@ -1,25 +1,36 @@
 import java.text.Format;
 import java.text.Normalizer;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Scanner;
 
 public class Question extends Task {
     Scanner scanner = new Scanner(System.in);
-    private String questiontext;
-    private String answertext;
-    private String studentanswer;
+    String questiontext;
+    int answer;
+
+    HashMap<Integer,String> questions_answer = new HashMap<>();
+    HashMap<Student,Integer> studentanswer = new HashMap<>();
+    HashMap<String,Integer> students_score = new HashMap<>();
 
     // Constructor
-    public Question(String deadline, String questiontext, String answertext, String taskname,Unit unit, Teacher teacher) {
+    public Question(String deadline, String questiontext, int answer, String taskname,Unit unit, Teacher teacher) {
         super(deadline, taskname, teacher,unit);
         setQuestiontext(questiontext);
-        setAnswertext(answertext);
+        setAnswertext(answer);
     }
 
-    public void AnswerToQuestion(){
+    public void AnswerToQuestion(Student student){
         System.out.println("problem : \n"+questiontext +"\n enter your answer : ");
-        String answer = scanner.nextLine();
-        studentanswer = answer;
+        int index =0;
+        for (String text : questions_answer.values()){
+            System.out.println(++index +")"+ text);
+        }
+        System.out.println("choose correct answer :");
+        int answer = scanner.nextInt();
+        studentanswer.put(student,answer);
         System.out.println("your answer saved successfully");
     }
     // Setter And Getters
@@ -33,20 +44,20 @@ public class Question extends Task {
         }
     }
 
-    public void setAnswertext(String answertext) {
-        if (!answertext.isEmpty()) {
-            this.answertext = answertext;
+    public void setAnswertext(int answer) {
+        if (answer > 0 ) {
+            this.answer = answer;
         } else {
             System.out.println("answer can't be empty!");
-            setAnswertext(scanner.next());
+            setAnswertext(scanner.nextInt());
         }
     }
 
     public String getQuestiontext(){
         return this.questiontext;
     }
-    public String getAnswertext(){
-        return this.answertext;
+    public int getAnswertext(){
+        return this.answer;
     }
 
     public String getFdate(){

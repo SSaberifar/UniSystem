@@ -5,8 +5,10 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.function.LongConsumer;
 
 public class Quiz extends Task {
@@ -17,8 +19,10 @@ public class Quiz extends Task {
     private int score;
 
 
-    private HashMap<String, String> problem_answers = new HashMap<>();
-    private HashMap<String, String> problem_student = new HashMap<>();
+    HashMap<String, String> problem_answers = new HashMap<>();
+    HashMap<Student, String> student_answer = new HashMap<>();
+    List<HashMap<Student,String>> students_holder = new ArrayList<>();
+    HashMap<String ,Integer> students_score = new HashMap<>();
 
     public Quiz(String startdate, String quiztime,String deadline, String taskname, Unit unit, Teacher teacher ,int score) {
         super(deadline,taskname,teacher,unit);
@@ -36,7 +40,7 @@ public class Quiz extends Task {
         }
     }
 
-    public void AnswerToQuiz() {
+    public void AnswerToQuiz(Student student) {
         int index = 0 ;
         System.out.println("enter answers :");
         int startminut = LocalDateTime.now().getHour() * 60 + LocalDateTime.now().getMinute();
@@ -48,7 +52,7 @@ public class Quiz extends Task {
             int quiztime = Integer.parseInt( getQuizTime().split(":")[0] ) * 60 + Integer.parseInt( getQuizTime().split(":")[1] );
 
             if ( taskUnit.getTimeState(getQuizTime()) && (answerminut - startminut) < quiztime){
-                problem_student.put( problem_answers.get(index), answer);
+                student_answer.put( student, answer);
                 index++;
             } else {
                 System.out.println("The exam time is over.");
@@ -56,6 +60,7 @@ public class Quiz extends Task {
             }
 
         } while (index < problem_answers.size());
+        students_holder.add(student_answer);
         System.out.println("Your answers saved successfully");
     }
 

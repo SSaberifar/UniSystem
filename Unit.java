@@ -22,19 +22,19 @@ public class Unit {
     public Unit(){}
 
     // Methods
-    public void AddQuestion(String deadline, String taskname, String questiontext, String answertext) {
-        if (!deadline.isEmpty() && !taskname.isEmpty() && !questiontext.isEmpty() && !answertext.isEmpty()) {
-            tasks.add(new Question(deadline, questiontext, answertext,taskname, this,this.teacher));
+    public void AddQuestion(String deadline, String taskname, String questiontext, int answer) {
+        if (!deadline.isEmpty() && !taskname.isEmpty() && !questiontext.isEmpty() && answer>0) {
+            tasks.add(new Question(deadline, questiontext, answer,taskname, this,this.teacher));
             System.out.println("question added , do you want to add another question?y/n");
             if (scanner.next().charAt(0) == 'y') {
                 System.out.println("enter date, then question name ,text and answer");
-                AddQuestion(scanner.next(), scanner.next(), scanner.next(), scanner.next());
+                AddQuestion(scanner.next(), scanner.next(), scanner.next(), scanner.nextInt());
             }
         } else {
             System.out.println("deadline and question name can't be empty , do you want try again?y/n");
             if (scanner.next().charAt(0) == 'y') {
                 System.out.println("enter date, then question name ,text and answer");
-                AddQuestion(scanner.next(), scanner.next(), scanner.next(), scanner.next());
+                AddQuestion(scanner.next(), scanner.next(), scanner.next(), scanner.nextInt());
             }
         }
     }

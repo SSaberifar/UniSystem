@@ -67,11 +67,11 @@ public class Student extends Person {
                                 String accept = scanner.next();
                                 if (accept.equals("y") && task instanceof Quiz quiz && unit.getTimeState(quiz.getFdate())){
                                     System.out.println(" quiz name : "+quiz.getName()+" total time : "+ quiz.getQuizTime());
-                                    quiz.AnswerToQuiz();
+                                    quiz.AnswerToQuiz(this);
                                     selectMenu();
                                 } else if (accept.equals("y") && task instanceof Question question && unit.getTimeState(question.getFdate())) {
                                     System.out.println(" question name : "+question.getName()+" deadline : "+ question.getFdate());
-                                    question.AnswerToQuestion();
+                                    question.AnswerToQuestion(this);
                                     selectMenu();
                                 }else {
                                     selectMenu();
