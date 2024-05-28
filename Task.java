@@ -3,22 +3,25 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
 
-public abstract class Task{
-    Scanner scanner = new Scanner(System.in);
+public abstract class Task {
+    protected static final Scanner scanner = new Scanner(System.in);
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
     protected Date deadline;
-    protected String taskname;
+    protected String taskName;
     protected Teacher taskTeacher;
     protected Unit taskUnit;
 
     // Constructor
-    public Task(String deadline, String taskname,Teacher taskTeacher,Unit taskUnit) {
-        setName(taskname);
+    public Task(String deadline, String taskName, Teacher taskTeacher, Unit taskUnit) {
+        setName(taskName);
         setDeadline(deadline);
         setTaskTeacher(taskTeacher);
         setTaskUnit(taskUnit);
     }
 
+
+    // Getter and Setter for Task Unit
     public Unit getTaskUnit() {
         return taskUnit;
     }
@@ -27,6 +30,7 @@ public abstract class Task{
         this.taskUnit = taskUnit;
     }
 
+    // Getter and Setter for Task Teacher
     public Teacher getTaskTeacher() {
         return taskTeacher;
     }
@@ -35,36 +39,40 @@ public abstract class Task{
         this.taskTeacher = taskTeacher;
     }
 
-    private void setDeadline(String deadline) {
-        if (deadline.isEmpty()) {
-            System.out.println("date can't be empty!");
-            setDeadline(scanner.next());
-        } else {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    // Setter for Deadline with Validation
+    public void setDeadline(String deadline) {
+        while (true) {
+            if (deadline.isEmpty()) {
+                System.out.println("Date can't be empty! Enter the deadline:");
+                deadline = scanner.next();
+                continue;
+            }
+
             try {
-                this.deadline = sdf.parse(deadline);
+                this.deadline = DATE_FORMAT.parse(deadline);
+                break;
             } catch (ParseException e) {
-                System.out.println(" deadline time is invalid! enter hours:minutes");
-                setDeadline(scanner.next());
+                System.out.println("Invalid date format! Use format: yyyy-MM-dd HH:mm. Enter the deadline:");
+                deadline = scanner.next();
             }
         }
     }
 
-    public String getName() {
-        return this.taskname;
-    }
-
-    // Setter And Getter
-    private void setName(String name) {
-        if (!name.isEmpty()) {
-            this.taskname = name;
-        } else {
-            System.out.println("Enter valid name for this task");
-            setName(scanner.next());
-        }
-    }
-
-    public Date getDeadlineDate(){
+    // Getter for Deadline Date
+    public Date getDeadlineDate() {
         return this.deadline;
+    }
+
+    // Getter and Setter for Task Name with Validation
+    public String getName() {
+        return this.taskName;
+    }
+
+    public void setName(String name) {
+        while (name.isEmpty()) {
+            System.out.println("Enter a valid name for this task:");
+            name = scanner.next();
+        }
+        this.taskName = name;
     }
 }

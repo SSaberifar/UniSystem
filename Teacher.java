@@ -3,328 +3,292 @@ import java.util.Scanner;
 
 public class Teacher extends Person {
 
-    Scanner scanner = new Scanner(System.in);
-
-    public Teacher(String firstName, String lastname, String username, String email, String phoneNumber, String role, String pass, String educationalID) {
-        super(firstName, lastname, username, email, phoneNumber, role, pass, educationalID);
+    public Teacher(String firstName, String lastName, String username, String email, String phoneNumber, String role, String pass, String educationalID) {
+        super(firstName, lastName, username, email, phoneNumber, role, pass, educationalID);
     }
 
-
-    ////////////////////methods/////////////////
-
-    public void AddQuestion(String deadline, String taskname, String questiontext, int answer, Unit unit) {
-        unit.tasks.add(new Question(deadline, questiontext, answer, taskname, unit, this));
-        System.out.println("question added , do you want to add another question(y/n)");
-        String questionBool = scanner.next();
-        if (questionBool.equals("y")) {
-            System.out.println("enter date, then question name ,text and answer");
-            String queadead = scanner.next();
-            String queaname = scanner.next();
-            scanner.nextLine(); // Consume the newline
-            String queatext = scanner.nextLine();
-            int queaans = scanner.nextInt();
-            AddQuestion(queadead, queaname, queatext, queaans, unit);
+    // Methods
+    public void addQuestion(String deadline, String taskName, String questionText, int answer, Unit unit) {
+        Scanner scanner = new Scanner(System.in);
+        unit.getTasks().add(new Question(deadline, questionText, answer, taskName, unit, this));
+        System.out.println("Question added. Do you want to add another question (y/n)?");
+        if (scanner.next().equalsIgnoreCase("y")) {
+            System.out.println("Enter date, then question name, text, and answer:");
+            addQuestion(scanner.next(), scanner.next(), scanner.nextLine().trim(), scanner.nextInt(), unit);
         }
         Main.printMenu();
     }
 
-    public void AddQuiz() {
-        System.out.println("Enter unit name");
+    public void addQuiz() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter unit name:");
         String unitName = scanner.next();
-        scanner.nextLine(); // Consume the newline
-        boolean validUnit = false;
-        int unitIndex = 0;
-        for (Unit unit : units) {
-            if (unitName.equals(unit.getUnitname())) {
-                validUnit = true;
-                break;
-            }
-            unitIndex++;
-        }
-        if (validUnit) {
-            System.out.println("Enter start date, quiz time, finish date and quiz name and score:");
+        Unit unit = findUnitByName(unitName);
+        if (unit != null) {
+            System.out.println("Enter start date, quiz time, finish date, quiz name, and score:");
             String startDate = scanner.next();
             String quizTime = scanner.next();
             String finishDate = scanner.next();
             String quizName = scanner.next();
             int score = scanner.nextInt();
-            scanner.nextLine(); // Consume the newline
-            units.get(unitIndex).AddQuiz(startDate, quizTime, finishDate, quizName,score);
+            unit.addQuiz(startDate, quizTime, finishDate, quizName, score);
             Main.printMenu();
         } else {
-            System.out.println("invalid unit name! do you want try again?y/n");
-            if (scanner.next().charAt(0) == 'y') {
-                scanner.nextLine(); // Consume the newline
-                AddQuiz();
-            } else {
-                System.out.println("Please enter your function number:");
-                Main.printMenu();
-            }
+            retryAddQuiz();
         }
     }
 
-    public void AddUnit() throws Exceptions.CustomArrayException {
+    public void retryAddQuiz() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Invalid unit name! Do you want to try again (y/n)?");
+        if (scanner.next().equalsIgnoreCase("y")) {
+            addQuiz();
+        } else {
+            Main.printMenu();
+        }
+    }
+
+    public void addUnit() throws Exceptions.CustomArrayException {
+        Scanner scanner = new Scanner(System.in);
         if (units.size() >= 10) {
             throw new Exceptions.CustomArrayException("Cannot add more units, the array is full!");
-        } else {
-            System.out.println("Enter unit name:");
-            String unitName = scanner.next();
-            scanner.nextLine(); // Consume the newline
-            units.add(new Unit(unitName, this));
-            System.out.println("Unit Created!");
         }
+        System.out.println("Enter unit name:");
+        String unitName = scanner.next();
+        units.add(new Unit(unitName, this));
+        System.out.println("Unit Created!");
     }
 
     public void deleteUnit() {
-        try {
-            System.out.println("Enter unit name to delete:");
-            String deleteUnit = scanner.next();
-            scanner.nextLine(); // Consume the newline
-            boolean unitFound = false;
-            for (Unit unit : units) {
-                if (unit.getUnitname().equals(deleteUnit)) {
-                    units.remove(unit);
-                    System.out.println("Unit Removed!");
-                    unitFound = true;
-                    break;
-                }
-            }
-            if (!unitFound) {
-                throw new Exceptions.CustomArrayException("Unit not found!");
-            }
-        } catch (Exceptions.CustomArrayException e) {
-            System.out.println("Array index out of bounds: " + e.getMessage());
-            e.printStackTrace();
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter unit name to delete:");
+        String deleteUnitName = scanner.next();
+        Unit unitToDelete = findUnitByName(deleteUnitName);
+        if (unitToDelete != null) {
+            units.remove(unitToDelete);
+            System.out.println("Unit Removed!");
+        } else {
+            System.out.println("Unit not found!");
         }
-
     }
 
-    public void AddStudent(String unitName, String username) {
-        for (Student student : Main.students) {
-            if (student.getUsername().equals(username)) {
-                for (Unit unit : units) {
-                    if (unit.getUnitname().equals(unitName)) {
-                        unit.setStudents(student);
-                        student.units.add(unit);
-                        System.out.println("Student " + username + " Added!");
-                        break;
-                    }
-                }
+    public void addStudent(String unitName, String username) {
+        Student student = Main.students.stream()
+                .filter(s -> s.getUsername().equals(username))
+                .findFirst()
+                .orElse(null);
+        if (student != null) {
+            Unit unit = findUnitByName(unitName);
+            if (unit != null) {
+                unit.addStudent(student);
+                System.out.println("Student " + username + " Added!");
             }
         }
     }
 
     public void deleteStudent(String unitName, String username) {
-        for (Student student : Main.students) {
-            if (student.getUsername().equals(username)) {
-                for (Unit unit : units) {
-                    if (unit.getUnitname().equals(unitName)) {
-                        unit.students.remove(student);
-                        student.units.remove(unit);
-                        System.out.println("Student " + username + " Removed!");
-                        break;
-                    }
-                }
+        Student student = Main.students.stream()
+                .filter(s -> s.getUsername().equals(username))
+                .findFirst()
+                .orElse(null);
+        if (student != null) {
+            Unit unit = findUnitByName(unitName);
+            if (unit != null) {
+                unit.getStudents().remove(student);
+                System.out.println("Student " + username + " Removed!");
             }
         }
     }
 
-    public void AddNotification(Unit unit) {
+    public void addNotification(Unit unit) {
+        Scanner scanner = new Scanner(System.in);
         System.out.println("Enter notification:");
         String notification = scanner.nextLine();
-        unit.notifications.add(notification);
+        unit.getNotifications().add(notification);
         System.out.println("Notification Added!");
     }
 
     public void deleteNotification(Unit unit) {
+        Scanner scanner = new Scanner(System.in);
         System.out.println("Enter notification to delete:");
         String tag = scanner.nextLine();
-        for (String sms : unit.notifications) {
-            if (sms.equals(tag)) {
-                unit.notifications.remove(sms);
-                System.out.println("Notification Removed!");
-                break;
-            }
+        if (unit.getNotifications().remove(tag)) {
+            System.out.println("Notification Removed!");
+        } else {
+            System.out.println("Notification not found!");
         }
     }
 
-
     @Override
     public void showClasses() {
+        Scanner scanner = new Scanner(System.in);
         if (units.isEmpty()) {
-            System.out.println("You don't have any classes!");
-            System.out.println("Do you want to create a new class? (y/n)");
-            String classOperation = scanner.next();
-            scanner.nextLine(); // Consume the newline
-            if (classOperation.equals("y")) {
+            System.out.println("You don't have any classes! Do you want to create a new class? (y/n)");
+            if (scanner.next().equalsIgnoreCase("y")) {
                 try {
-                    AddUnit();
+                    addUnit();
                 } catch (Exceptions.CustomArrayException e) {
-                    throw new RuntimeException(e);
+                    System.out.println(e.getMessage());
                 }
             }
         } else {
-            for (int i = 0; i < units.size(); i++) {
-                if (units.get(i) != null) {
-                    System.out.println((i + 1) + "- " + units.get(i).unitname);
-                }
-            }
-            System.out.println("Do you want to create a new class? (y/n)");
-            String answer = scanner.next();
-            scanner.nextLine(); // Consume the newline
-            if (answer.equals("y")) {
-                try {
-                    AddUnit();
-                } catch (Exceptions.CustomArrayException e) {
-                    System.out.println(e.getMessage());
-                    e.printStackTrace();
-                }
-            }
-            System.out.println("Do you want to delete a class? (y/n)");
-            String deleteOperation = scanner.next();
-            scanner.nextLine(); // Consume the newline
-            if (deleteOperation.equals("y")) {
-                deleteUnit();
-            }
-            System.out.println("Do you want to add a student? (y/n)");
-            String addOperation = scanner.next();
-            scanner.nextLine(); // Consume the newline
-            if (addOperation.equals("y")) {
-                System.out.println("Enter unit name:");
-                String addUnit = scanner.next();
-                System.out.println("Enter student username:");
-                String addStudent = scanner.next();
-                scanner.nextLine(); // Consume the newline
-                AddStudent(addUnit, addStudent);
-            }
-            System.out.println("Do you want to delete a student? (y/n)");
-            String deleteStudent = scanner.next();
-            scanner.nextLine(); // Consume the newline
-            if (deleteStudent.equals("y")) {
-                System.out.println("Enter unit name:");
-                String unitName = scanner.next();
-                System.out.println("Enter student username:");
-                String studentName = scanner.next();
-                scanner.nextLine(); // Consume the newline
-                deleteStudent(unitName, studentName);
-            }
+            units.forEach(unit -> System.out.println((units.indexOf(unit) + 1) + "- " + unit.getUnitName()));
+            manageClasses(scanner);
         }
         selectMenu();
+    }
+
+    public void manageClasses(Scanner scanner) {
+        System.out.println("Do you want to create a new class? (y/n)");
+        if (scanner.next().equalsIgnoreCase("y")) {
+            try {
+                addUnit();
+            } catch (Exceptions.CustomArrayException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        System.out.println("Do you want to delete a class? (y/n)");
+        if (scanner.next().equalsIgnoreCase("y")) {
+            deleteUnit();
+        }
+        manageStudents(scanner);
+    }
+
+    public void manageStudents(Scanner scanner) {
+        System.out.println("Do you want to add a student? (y/n)");
+        if (scanner.next().equalsIgnoreCase("y")) {
+            System.out.println("Enter unit name:");
+            String addUnit = scanner.next();
+            System.out.println("Enter student username:");
+            String addStudent = scanner.next();
+            addStudent(addUnit, addStudent);
+        }
+        System.out.println("Do you want to delete a student? (y/n)");
+        if (scanner.next().equalsIgnoreCase("y")) {
+            System.out.println("Enter unit name:");
+            String unitName = scanner.next();
+            System.out.println("Enter student username:");
+            String studentName = scanner.next();
+            deleteStudent(unitName, studentName);
+        }
     }
 
     @Override
     protected void showTasks() {
-        for (Unit unit : units) {
-            if (unit.tasks.isEmpty()) {
-                System.out.println("You dont have any task");
-                System.out.println("do you want to create new task?(y/n)");
-                String taskAnswer = scanner.next();
-                scanner.nextLine(); // Consume the newline
-                if (taskAnswer.equals("y")) {
-                    System.out.println("which task do you want to create?(Quiz,Question)");
-                    String question = scanner.next();
-                    scanner.nextLine(); // Consume the newline
-                    if (question.equals("Quiz")) {
-                        AddQuiz();
-                    } else {
-                        System.out.println("Enter deadline:");
-                        String deadline = scanner.nextLine();
-                        scanner.nextLine(); // Consume the newline
-                        System.out.println("Enter task name:");
-                        String taskname = scanner.next();
-                        scanner.nextLine(); // Consume the newline
-                        System.out.println("Enter question text:");
-                        String questiontext = scanner.nextLine();
-                        System.out.println("Enter answer text:");
-                        int answer = scanner.nextInt();
-                        AddQuestion(deadline, taskname, questiontext, answer, unit);
-                    }
-                    break;
-                } else {
-                    selectMenu();
+        Scanner scanner = new Scanner(System.in);
+        units.forEach(unit -> {
+            if (unit.getTasks().isEmpty()) {
+                System.out.println("You don't have any tasks. Do you want to create a new task? (y/n)");
+                if (scanner.next().equalsIgnoreCase("y")) {
+                    createTask(scanner, unit);
                 }
             } else {
-                System.out.println("unit " + unit.getName() + " tasks :");
-                for (Task task : unit.tasks) {
-                    if (task instanceof Quiz quizInstance) {
-                        System.out.println("Quiz name : " + quizInstance.getName() + " deadline : " + quizInstance.getFdate());
-                    }
-                }
-                System.out.println("---------------------------");
-                for (Task task : unit.tasks) {
-                    if (task instanceof Question question) {
-                        System.out.println("problem text : " + question.getQuestiontext() + " answer text : " + question.getAnswertext() + " deadline : " + question.getFdate());
-                        if (!unit.getTimeState(question.getFdate())) {
-                            System.out.println("Students answers are ready!");
-                        }
-                    }
+                displayTasks(unit);
+            }
+        });
+        selectMenu();
+    }
+
+    public void createTask(Scanner scanner, Unit unit) {
+        System.out.println("Which task do you want to create? (Quiz, Question)");
+        String taskType = scanner.next();
+        if (taskType.equalsIgnoreCase("Quiz")) {
+            addQuiz();
+        } else {
+            System.out.println("Enter deadline:");
+            String deadline = scanner.next();
+            System.out.println("Enter task name:");
+            String taskName = scanner.next();
+            System.out.println("Enter question text:");
+            String questionText = scanner.next();
+            System.out.println("Enter answer text:");
+            int answer = scanner.nextInt();
+            addQuestion(deadline, taskName, questionText, answer, unit);
+        }
+    }
+
+    public void displayTasks(Unit unit) {
+        unit.getTasks().forEach(task -> {
+            if (task instanceof Quiz quiz) {
+                System.out.println("Quiz name: " + quiz.getName() + ", deadline: " + quiz.getFdate());
+            } else if (task instanceof Question question) {
+                System.out.println("Problem text: " + question.getQuestionText() + ", answer text: " + question.getAnswer() + ", deadline: " + question.getFormattedDate());
+                if (!unit.isDeadlinePassed(question.getFormattedDate())) {
+                    System.out.println("Students' answers are ready!");
                 }
             }
-        }
+        });
     }
 
     @Override
     public void showNotification() {
-        for (Unit unit : units) {
-            if (unit.notifications.isEmpty()) {
-                System.out.println("You don't have any notifications!");
-                System.out.println("Do you want to create a new notification? (y/n)");
-                String addNotification = scanner.next();
-                scanner.nextLine(); // Consume the newline
-                if (addNotification.equals("y")) {
-                    AddNotification(unit);
+        Scanner scanner = new Scanner(System.in);
+        units.forEach(unit -> {
+            if (unit.getNotifications().isEmpty()) {
+                System.out.println("You don't have any notifications. Do you want to create a new notification? (y/n)");
+                if (scanner.next().equalsIgnoreCase("y")) {
+                    addNotification(unit);
                 }
             } else {
-                for (int i = 0; i < unit.notifications.size(); i++) {
-                    if (unit.notifications.get(i) != null) {
-                        System.out.println(unit.notifications.get(i));
-                    }
-                }
-                System.out.println("Do you want to delete a notification? (y/n)");
-                String deleteNotification = scanner.next();
-                scanner.nextLine(); // Consume the newline
-                if (deleteNotification.equals("y")) {
-                    deleteNotification(unit);
-                }
+                unit.getNotifications().forEach(System.out::println);
+                manageNotifications(scanner, unit);
             }
-        }
+        });
         selectMenu();
     }
 
-    public void Correcting(String unitname , String taskname) {
+    public void manageNotifications(Scanner scanner, Unit unit) {
+        System.out.println("Do you want to delete a notification? (y/n)");
+        if (scanner.next().equalsIgnoreCase("y")) {
+            deleteNotification(unit);
+        }
+    }
 
-        for (Unit unit : units){
-            if (unit.getName().equals(unitname)){
-                for (Task task : unit.tasks){
-                    if (task.getName().equals(taskname) && task instanceof Quiz quiz ){
-                        int index =0;
-                        System.out.println("Problems :");
-                        for (String problems : quiz.problem_answers.keySet()){
-                            System.out.println(problems);
-                        }
-                        for (HashMap<Student,String> hashMap : quiz.students_holder){
-                            System.out.println("Student "+ ++index +"answers :");
-                            String studentid = "";
-                            for(Student student : hashMap.keySet()){
-                                System.out.println(hashMap.get(student)+"\n-----------");
-                                studentid = student.getEducationalID();
-                            }
-                            System.out.println("enter student "+studentid+" score :");
-                            int score = scanner.nextInt();
-                            quiz.students_score.put(studentid,score);
-                        }
-                    } else if (task.getName().equals(taskname) && task instanceof Question question) {
-                        System.out.println("question text : "+question.questiontext+"\nAutocorrecting... ");
-                        for (Student student  : question.studentanswer.keySet()){
-                            if (question.answer == question.studentanswer.get(student)){
-                                question.students_score.put(student.getEducationalID(),1);
-                            }
-                        }
-                        System.out.println("Autocorrecting finished . students score save");
+    public void correcting(String unitName, String taskName) {
+        Scanner scanner = new Scanner(System.in);
+        Unit unit = findUnitByName(unitName);
+        if (unit != null) {
+            for (Task task : unit.getTasks()) {
+                if (task.getName().equals(taskName)) {
+                    if (task instanceof Quiz quiz) {
+                        correctQuiz(scanner, quiz);
+                    } else if (task instanceof Question question) {
+                        autoCorrectQuestion(question);
                     }
                 }
             }
         }
-        System.out.println("Correct students answers :");
+        System.out.println("Correct students' answers:");
+    }
+
+    public void correctQuiz(Scanner scanner, Quiz quiz) {
+        int index = 0;
+        System.out.println("Problems:");
+        quiz.getProblemAnswers().keySet().forEach(System.out::println);
+        for (HashMap<Student, String> studentAnswers : quiz.getStudentsHolder()) {
+            System.out.println("Student " + ++index + " answers:");
+            studentAnswers.forEach((student, answer) -> {
+                System.out.println(answer + "\n-----------");
+                System.out.println("Enter student " + student.getEducationalID() + " score:");
+                quiz.getStudentsScore().put(student.getEducationalID(), scanner.nextInt());
+            });
+        }
+    }
+
+    public void autoCorrectQuestion(Question question) {
+        System.out.println("Question text: " + question.getQuestionText() + "\nAutocorrecting...");
+        question.getStudentAnswer().forEach((student, answer) -> {
+            if (question.getQuestionsAnswer().equals(answer)) {
+                question.getStudentScores().put(student.getEducationalID(), 1);
+            }
+        });
+        System.out.println("Autocorrecting finished. Students' scores saved.");
+    }
+
+    public Unit findUnitByName(String unitName) {
+        return units.stream()
+                .filter(unit -> unit.getUnitName().equals(unitName))
+                .findFirst()
+                .orElse(null);
     }
 }
