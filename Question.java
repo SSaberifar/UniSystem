@@ -5,23 +5,18 @@ import java.util.Scanner;
 
 public class Question extends Task {
     private String questionText;
-    private int answer;
-    private final HashMap<Integer, String> questionsAnswer = new HashMap<>();
-    private final HashMap<Student, Integer> studentAnswer = new HashMap<>();
+    private String answer;
+    private final HashMap<Student, String> studentAnswer = new HashMap<>();
     private final HashMap<String, Integer> studentScores = new HashMap<>();
 
     // Constructor
-    public Question(String deadline, String questionText, int answer, String taskName, Unit unit, Teacher teacher) {
+    public Question(String deadline, String questionText, String answer, String taskName, Unit unit, Teacher teacher) {
         super(deadline, taskName, teacher, unit);
         setQuestionText(questionText);
         setAnswer(answer);
     }
 
-    public HashMap<Integer, String> getQuestionsAnswer() {
-        return questionsAnswer;
-    }
-
-    public HashMap<Student, Integer> getStudentAnswer() {
+    public HashMap<Student, String> getStudentAnswer() {
         return studentAnswer;
     }
 
@@ -31,12 +26,7 @@ public class Question extends Task {
 
     public void answerToQuestion(Student student, Scanner scanner) {
         System.out.println("Problem: \n" + questionText + "\nEnter your answer: ");
-        int index = 0;
-        for (String text : questionsAnswer.values()) {
-            System.out.println(++index + ")" + text);
-        }
-        System.out.println("Choose the correct answer:");
-        int answer = scanner.nextInt();
+        String answer = scanner.nextLine();
         studentAnswer.put(student, answer);
         System.out.println("Your answer has been saved successfully.");
     }
@@ -55,20 +45,30 @@ public class Question extends Task {
     }
 
     // Setter and Getter for answer
-    public void setAnswer(int answer) {
-        while (answer <= 0) {
-            System.out.println("Answer can't be empty or zero! Please enter a valid answer:");
-            answer = new Scanner(System.in).nextInt(); // Temporary scanner to get input
+    public void setAnswer(String answer) {
+        while (answer == null) {
+            System.out.println("Answer can't be empty! Please enter a valid answer:");
+            answer = new Scanner(System.in).nextLine();
         }
         this.answer = answer;
     }
 
-    public int getAnswer() {
+    public String getAnswer() {
         return this.answer;
     }
 
     public String getFormattedDate() {
         Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         return formatter.format(super.getDeadlineDate());
+    }
+
+    @Override
+    public String toString() {
+        return "Question{" +
+                "questionText='" + questionText + '\'' +
+                ", answer='" + answer + '\'' +
+                ", studentAnswer=" + studentAnswer +
+                ", studentScores=" + studentScores +
+                '}';
     }
 }

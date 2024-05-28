@@ -24,7 +24,7 @@ public class Unit {
     }
 
     // Methods
-    public void addQuestion(String deadline, String taskName, String questionText, int answer) {
+    public void addQuestion(String deadline, String taskName, String questionText, String answer) {
         Scanner scanner = new Scanner(System.in);
         if (isValidQuestion(deadline, taskName, questionText, answer)) {
             tasks.add(new Question(deadline, questionText, answer, taskName, this, this.teacher));
@@ -40,14 +40,14 @@ public class Unit {
         }
     }
 
-    private boolean isValidQuestion(String deadline, String taskName, String questionText, int answer) {
-        return !deadline.isEmpty() && !taskName.isEmpty() && !questionText.isEmpty() && answer > 0;
+    private boolean isValidQuestion(String deadline, String taskName, String questionText, String answer) {
+        return !deadline.isEmpty() && !taskName.isEmpty() && !questionText.isEmpty() && !answer.isEmpty();
     }
 
     private void promptForQuestionDetails() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter date, then question name, text, and answer:");
-        addQuestion(scanner.next(), scanner.next(), scanner.next(), scanner.nextInt());
+        addQuestion(scanner.next(), scanner.next(), scanner.nextLine(), scanner.nextLine());
     }
 
     public void addQuiz(String startDate, String quizTime, String deadline, String quizName, int score) {
@@ -141,4 +141,17 @@ public class Unit {
     public List<String> getNotifications() {
         return notifications;
     }
+
+    @Override
+    public String toString() {
+        return "Unit{" +
+                "unitName='" + unitName + '\'' +
+                ", students=" + students +
+                ", notifications=" + notifications +
+                ", tasks=" + tasks +
+                ", currentQuizIndex=" + currentQuizIndex +
+                ", teacher=" + teacher +
+                '}';
+    }
+
 }

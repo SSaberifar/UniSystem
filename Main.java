@@ -12,7 +12,7 @@ public class Main {
     static Scanner scanner = new Scanner(System.in);
 
     public static void printMenu() {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         Calendar cal = Calendar.getInstance();
         System.out.println(dateFormat.format(cal.getTime()));
         System.out.println("1- Teacher/Student classes");

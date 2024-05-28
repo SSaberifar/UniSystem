@@ -47,14 +47,12 @@ public abstract class Task {
                 deadline = scanner.next();
                 continue;
             }
-
             try {
                 this.deadline = DATE_FORMAT.parse(deadline);
-                break;
             } catch (ParseException e) {
-                System.out.println("Invalid date format! Use format: yyyy-MM-dd HH:mm. Enter the deadline:");
-                deadline = scanner.next();
+                throw new RuntimeException(e);
             }
+            break;
         }
     }
 
@@ -74,5 +72,15 @@ public abstract class Task {
             name = scanner.next();
         }
         this.taskName = name;
+    }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "deadline=" + deadline +
+                ", taskName='" + taskName + '\'' +
+                ", taskTeacher=" + taskTeacher +
+                ", taskUnit=" + taskUnit +
+                '}';
     }
 }

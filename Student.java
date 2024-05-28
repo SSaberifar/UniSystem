@@ -134,4 +134,11 @@ public class Student extends Person {
         super.showInfo();
         System.out.println("Study Field: " + getStudyField());
     }
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "major='" + major + '\'' +
+                '}';
+    }
 }
