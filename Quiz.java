@@ -128,6 +128,10 @@ public class Quiz extends Task {
         this.score = score;
     }
 
+    public int getScore(){
+        return this.score;
+    }
+
     public String getQuizTxt() {
         return quizTxt;
     }

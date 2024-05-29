@@ -24,14 +24,19 @@ public class Teacher extends Person {
         Unit unit = findUnitByName(unitName);
         if (unit != null) {
             System.out.println("Enter start date, quiz time, finish date, quiz name, quiz text, answers and correct answer:");
-            String startDate = scanner.next();
+            System.out.println("Enter start date:");
+            String startDate = scanner.nextLine();
+            System.out.println("Enter quiztime:");
             String quizTime = scanner.next();
-            String finishDate = scanner.next();
-            String quizName = scanner.next();
             scanner.nextLine();
-            String txt = scanner.nextLine();
-            String
-            unit.addQuiz(startDate, quizTime, finishDate, quizName, 0);
+            System.out.println("Enter finish date:");
+            String finishDate = scanner.nextLine();
+            System.out.println("Enter quizname:");
+            String quizName = scanner.next();
+            System.out.println("Enter quizscore:");
+            int score = scanner.nextInt();
+            scanner.nextLine();
+            unit.addQuiz(startDate, quizTime, finishDate, quizName, score);
             Main.printMenu();
         } else {
             retryAddQuiz();
@@ -226,17 +231,21 @@ public class Teacher extends Person {
     @Override
     public void showNotification() {
         Scanner scanner = new Scanner(System.in);
-        units.forEach(unit -> {
-            if (unit.getNotifications().isEmpty()) {
-                System.out.println("You don't have any notifications. Do you want to create a new notification? (y/n)");
-                if (scanner.next().equalsIgnoreCase("y")) {
-                    addNotification(unit);
+        if (units.isEmpty()){
+            System.out.println("You don't have any unit , please add unit then try again");
+        }else {
+            units.forEach(unit -> {
+                if (unit.getNotifications().isEmpty()) {
+                    System.out.println("You don't have any notifications. Do you want to create a new notification? (y/n)");
+                    if (scanner.next().equalsIgnoreCase("y")) {
+                        addNotification(unit);
+                    }
+                } else {
+                    unit.getNotifications().forEach(System.out::println);
+                    manageNotifications(scanner, unit);
                 }
-            } else {
-                unit.getNotifications().forEach(System.out::println);
-                manageNotifications(scanner, unit);
-            }
-        });
+            });
+        }
         selectMenu();
     }
 
@@ -251,7 +260,7 @@ public class Teacher extends Person {
         System.out.println("Quiz text: " + quiz.getQuizTxt() + "\nAutocorrecting...");
         quiz.getStudentAnswers().forEach((student, answer) -> {
             if (quiz.getQuizAns().equals(answer)) {
-                quiz.getStudentsScore().put(student.getEducationalID(), 20);
+                quiz.getStudentsScore().put(student.getEducationalID(), quiz.getScore());
             } else {
                 quiz.getStudentsScore().put(student.getEducationalID(), 0);
             }
