@@ -1,3 +1,4 @@
+import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -10,6 +11,32 @@ public class Main {
     public static List<Teacher> teachers = new ArrayList<>(5);
     public static List<Student> students = new ArrayList<>(10);
     static Scanner scanner = new Scanner(System.in);
+
+    private static final String FILE_PATH = "users.txt";
+
+    public static void loadUsers() {
+        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                switch (parts[7]) {
+                    case "Student":
+                        students.add(new Student(parts[3], parts[4], parts[2], parts[5], parts[6], parts[7], parts[1], parts[0], parts[8]));
+                        break;
+                    case "Teacher":
+                        teachers.add(new Teacher(parts[3], parts[4], parts[2], parts[5], parts[6], parts[7], parts[1], parts[0]));
+                        break;
+                    case "Official":
+                        officials.add(new Official(parts[3], parts[4], parts[2], parts[5], parts[6], parts[7], parts[1], parts[0]));
+                        break;
+                    default:
+                        System.out.println("Unknown role found in file: " + parts[7]);
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("An error occurred while loading users.");
+        }
+    }
 
     public static void printMenu() {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
@@ -28,26 +55,20 @@ public class Main {
         System.out.println("2 - SignUp");
         System.out.println("Please enter your function number:");
         int function = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
         if (function == 1) {
-            Login();
+            login();
         } else if (function == 2) {
-            SignUp();
+            signUp();
         } else {
             System.out.println("Invalid input! Please enter 1 or 2.");
             firstMenu();
         }
     }
 
-    private static void SignUp() {
-        String fn;
-        String ln;
-        String username;
-        String email;
-        String phoneNumber;
-        String pass;
-        String repass;
-        String userRole;
-        String educationalID;
+    private static void signUp() {
+        String fn, ln, username, email, phoneNumber, pass, repass, userRole, educationalID;
+
         do {
             System.out.println("Please enter your firstname :");
             fn = scanner.next();
@@ -59,15 +80,20 @@ public class Main {
             email = scanner.next();
             System.out.println("Please enter your phone number :");
             phoneNumber = scanner.next();
-            System.out.println("Please enter your pass :");
+            System.out.println("Please enter your password :");
             pass = scanner.next();
-            System.out.println("Please enter your pass again :");
+            System.out.println("Please enter your password again :");
             repass = scanner.next();
             System.out.println("Please choose your role (Teacher/Student/Official):");
             userRole = scanner.next();
-            System.out.println("Please enter your educationalID :");
+            System.out.println("Please enter your educational ID :");
             educationalID = scanner.next();
         } while (fn.isEmpty() || ln.isEmpty() || username.isEmpty() || email.isEmpty() || phoneNumber.isEmpty() || pass.isEmpty() || repass.isEmpty() || !pass.equals(repass) || educationalID.isEmpty() || userRole.isEmpty());
+
+        if (isUserDuplicate(username, email, phoneNumber, educationalID)) {
+            System.out.println("This user is repetitive.");
+            return;
+        }
 
         switch (userRole) {
             case "Student" -> {
@@ -76,105 +102,102 @@ public class Main {
                     System.out.println("Please enter your study field :");
                     studyField = scanner.next();
                 } while (studyField.isEmpty());
-                boolean repeat = false;
-                for (Student student : students) {
-                    if (student.getEducationalID().equals(educationalID) || student.getUsername().equals(username) || student.getEmail().equals(email) || student.getPhoneNumber().equals(phoneNumber)) {
-                        System.out.println("This user is repetitive.");
-                        repeat = true;
-                        break;
-                    }
-                }
-                if (!repeat) {
-                    students.add(new Student(fn, ln, username, email, phoneNumber, userRole, pass, educationalID, studyField));
-                    System.out.println("Student signed up successfully.");
 
-                }
+                students.add(new Student(fn, ln, username, email, phoneNumber, userRole, pass, educationalID, studyField));
+                saveUserToFile(new String[]{educationalID, pass, username, fn, ln, email, phoneNumber, userRole, studyField});
+                System.out.println("Student signed up successfully.");
             }
             case "Teacher" -> {
-                boolean repeat = false;
-                for (Teacher teacher : teachers) {
-                    if (teacher.getUsername().equals(username) || teacher.getEmail().equals(email) || teacher.getPhoneNumber().equals(phoneNumber)) {
-                        System.out.println("This user is repetitive.");
-                        repeat = true;
-                        break;
-                    }
-                }
-                if (!repeat) {
-                    teachers.add(new Teacher(fn, ln, username, email, phoneNumber, userRole, pass, educationalID));
-                    System.out.println("Teacher signed up successfully.");
-                }
+                teachers.add(new Teacher(fn, ln, username, email, phoneNumber, userRole, pass, educationalID));
+                saveUserToFile(new String[]{educationalID, pass, username, fn, ln, email, phoneNumber, userRole});
+                System.out.println("Teacher signed up successfully.");
             }
             case "Official" -> {
-                boolean repeat = false;
-                for (Official official : officials) {
-                    if (official.getUsername().equals(username) || official.getEmail().equals(email) || official.getPhoneNumber().equals(phoneNumber)) {
-                        System.out.println("This user is repetitive.");
-                        repeat = true;
-                        break;
-                    }
-                }
-                if (!repeat) {
-                    officials.add(new Official(fn, ln, username, email, phoneNumber, userRole, pass, educationalID));
-                    System.out.println("Official signed up successfully.");
-                }
+                officials.add(new Official(fn, ln, username, email, phoneNumber, userRole, pass, educationalID));
+                saveUserToFile(new String[]{educationalID, pass, username, fn, ln, email, phoneNumber, userRole});
+                System.out.println("Official signed up successfully.");
             }
             default -> System.out.println("Wrong User!");
         }
     }
 
-    private static void Login() {
+    private static boolean isUserDuplicate(String username, String email, String phoneNumber, String educationalID) {
+        for (Student student : students) {
+            if (student.getEducationalID().equals(educationalID) || student.getUsername().equals(username) || student.getEmail().equals(email) || student.getPhoneNumber().equals(phoneNumber)) {
+                return true;
+            }
+        }
+        for (Teacher teacher : teachers) {
+            if (teacher.getUsername().equals(username) || teacher.getEmail().equals(email) || teacher.getPhoneNumber().equals(phoneNumber)) {
+                return true;
+            }
+        }
+        for (Official official : officials) {
+            if (official.getUsername().equals(username) || official.getEmail().equals(email) || official.getPhoneNumber().equals(phoneNumber)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static void saveUserToFile(String[] userInfo) {
+        try (PrintWriter out = new PrintWriter(new FileWriter(FILE_PATH, true))) {
+            out.println(String.join(",", userInfo));
+        } catch (IOException e) {
+            System.out.println("Error in adding user to txt database");
+        }
+    }
+
+    private static void login() {
         System.out.println("Please enter your role (Teacher/Student/Official):");
         String userRole = scanner.next();
 
-        switch (userRole) {
-            case "Student" -> {
-                System.out.println("Please Enter your education ID:");
-                String userId = scanner.next();
-                System.out.println("Please Enter your password:");
-                String userPass = scanner.next();
+        System.out.println("Please enter your educational ID:");
+        String userId = scanner.next();
+        System.out.println("Please enter your password:");
+        String userPass = scanner.next();
 
-                for (Student student : students) {
-                    if (student.getPass().equals(userPass) && student.getEducationalID().equals(userId)) {
-                        System.out.println("Welcome " + student.getUsername());
-                        student.selectMenu();
-                        break;
-                    }
-                }
-            }
-            case "Teacher" -> {
-                System.out.println("Please Enter your education ID:");
-                String userCode = scanner.next();
-                System.out.println("Please Enter your password:");
-                String userPass = scanner.next();
+        boolean isValid = validateLogin(userRole, userId, userPass);
 
-                for (Teacher teacher : teachers) {
-                    if (teacher.getPass().equals(userPass) && teacher.getEducationalID().equals(userCode)) {
-                        System.out.println("Welcome " + teacher.getUsername());
-                        teacher.selectMenu();
-                        break;
-                    }
-                }
+        if (isValid) {
+            System.out.println("Login successful!");
+            switch (userRole) {
+                case "Student" -> students.stream()
+                        .filter(student -> student.getEducationalID().equals(userId))
+                        .findFirst()
+                        .ifPresent(Student::selectMenu);
+                case "Teacher" -> teachers.stream()
+                        .filter(teacher -> teacher.getEducationalID().equals(userId))
+                        .findFirst()
+                        .ifPresent(Teacher::selectMenu);
+                case "Official" -> officials.stream()
+                        .filter(official -> official.getEducationalID().equals(userId))
+                        .findFirst()
+                        .ifPresent(Official::selectMenu);
             }
-            case "Official" -> {
-                System.out.println("Please Enter your educational code:");
-                String userCode = scanner.next();
-                System.out.println("Please Enter your password:");
-                String userPass = scanner.next();
-
-                for (Official official : officials) {
-                    if (official.getPass().equals(userPass) && official.getEducationalID().equals(userCode)) {
-                        System.out.println("Welcome " + official.getUsername());
-                        official.selectMenu();
-                        break;
-                    }
-                }
-            }
-            default -> System.out.println("Wrong User!");
+        } else {
+            System.out.println("Invalid ID or password.");
         }
     }
 
+    private static boolean validateLogin(String userRole, String userId, String userPass) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (userId.equals(parts[0]) && userPass.equals(parts[1]) && userRole.equals(parts[7])) {
+                    return true;
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Error in finding user");
+        }
+        return false;
+    }
+
     public static void main(String[] args) {
-        for (int i = 0; i < 5; i++) {
+        loadUsers();
+        for (int i = 0; i < 6; i++) {
             firstMenu();
         }
     }
