@@ -112,7 +112,8 @@ public class Unit {
 
     public void addStudent(Student student) {
         if (students.size() < MAX_STUDENTS) {
-            students.add(student);
+            this.students.add(student);
+            student.units.add(this);
         } else {
             throw new IllegalStateException("Maximum number of students reached.");
         }
@@ -142,16 +143,16 @@ public class Unit {
         return notifications;
     }
 
-    @Override
-    public String toString() {
-        return "Unit{" +
-                "unitName='" + unitName + '\'' +
-                ", students=" + students +
-                ", notifications=" + notifications +
-                ", tasks=" + tasks +
-                ", currentQuizIndex=" + currentQuizIndex +
-                ", teacher=" + teacher +
-                '}';
+    public String studentString(){
+        StringBuilder names = new StringBuilder();
+        for(Student student:this.students){
+            names.append(student.getUsername()).append(",");
+        }
+        return names.toString();
     }
 
+    @Override
+    public String toString() {
+        return unitName + ":\n" + "teacher= " + teacher.getUsername() + "\n" + "Students= " + studentString();
+    }
 }

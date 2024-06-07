@@ -211,8 +211,6 @@ public abstract class Person {
     @Override
     public String toString() {
         return "Person{" +
-                "scanner=" + scanner +
-                ", units=" + units +
                 ", firstName='" + firstName + '\'' +
                 ", lastname='" + lastname + '\'' +
                 ", username='" + username + '\'' +
@@ -220,7 +218,6 @@ public abstract class Person {
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", role='" + role + '\'' +
                 ", pass='" + pass + '\'' +
-                ", educationalID='" + educationalID + '\'' +
-                '}';
+                ", educationalID='" + educationalID + '\'';
     }
 }

@@ -231,9 +231,9 @@ public class Teacher extends Person {
     @Override
     public void showNotification() {
         Scanner scanner = new Scanner(System.in);
-        if (units.isEmpty()){
+        if (units.isEmpty()) {
             System.out.println("You don't have any unit , please add unit then try again");
-        }else {
+        } else {
             units.forEach(unit -> {
                 if (unit.getNotifications().isEmpty()) {
                     System.out.println("You don't have any notifications. Do you want to create a new notification? (y/n)");
@@ -287,10 +287,4 @@ public class Teacher extends Person {
                 .orElse(null);
     }
 
-    @Override
-    public String toString() {
-        return "Teacher{" +
-                "units=" + units +
-                '}';
-    }
 }
