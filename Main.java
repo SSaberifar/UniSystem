@@ -8,9 +8,8 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Main {
-    public static List<Official> officials = new ArrayList<>(3);
-    public static List<Teacher> teachers = new ArrayList<>(5);
-    public static List<Student> students = new ArrayList<>(10);
+    public static List<Teacher> teachers = new ArrayList<>();
+    public static List<Student> students = new ArrayList<>();
     static Scanner scanner = new Scanner(System.in);
 
     private static void loadAllData() {
@@ -24,6 +23,8 @@ public class Main {
             }
         } catch (FileNotFoundException e) {
             System.out.println("Data files not found, starting with empty lists.");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -90,7 +91,7 @@ public class Main {
             pass = scanner.next();
             System.out.println("Please enter your password again :");
             repass = scanner.next();
-            System.out.println("Please choose your role (Teacher/Student/Official):");
+            System.out.println("Please choose your role (Teacher/Student):");
             userRole = scanner.next();
             System.out.println("Please enter your educational ID :");
             educationalID = scanner.next();
@@ -115,10 +116,6 @@ public class Main {
                 teachers.add(new Teacher(fn, ln, username, email, phoneNumber, userRole, pass, educationalID));
                 System.out.println("Teacher signed up successfully.");
             }
-            case "Official" -> {
-                officials.add(new Official(fn, ln, username, email, phoneNumber, userRole, pass, educationalID));
-                System.out.println("Official signed up successfully.");
-            }
             default -> System.out.println("Wrong User!");
         }
     }
@@ -131,11 +128,6 @@ public class Main {
         }
         for (Teacher teacher : teachers) {
             if (teacher.getUsername().equals(username) || teacher.getEmail().equals(email) || teacher.getPhoneNumber().equals(phoneNumber)) {
-                return true;
-            }
-        }
-        for (Official official : officials) {
-            if (official.getUsername().equals(username) || official.getEmail().equals(email) || official.getPhoneNumber().equals(phoneNumber)) {
                 return true;
             }
         }

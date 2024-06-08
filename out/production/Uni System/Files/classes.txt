@@ -1,3 +1,3 @@
 Ap:
 teacher= amiralif1383
-Students= amiralif1384,
+Students= amiralif1384

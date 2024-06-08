@@ -24,14 +24,14 @@ public class Teacher extends Person {
             System.out.println("Enter start date, quiz time, finish date, quiz name, quiz text, answers and correct answer:");
             System.out.println("Enter start date:");
             String startDate = scanner.nextLine();
-            System.out.println("Enter quiztime:");
+            System.out.println("Enter quiz time:");
             String quizTime = scanner.next();
             scanner.nextLine();
             System.out.println("Enter finish date:");
             String finishDate = scanner.nextLine();
-            System.out.println("Enter quizname:");
+            System.out.println("Enter quiz name:");
             String quizName = scanner.next();
-            System.out.println("Enter quizscore:");
+            System.out.println("Enter quiz score:");
             int score = scanner.nextInt();
             scanner.nextLine();
             unit.addQuiz(startDate, quizTime, finishDate, quizName, score);
@@ -214,7 +214,7 @@ public class Teacher extends Person {
     public void displayTasks(Unit unit) {
         unit.getTasks().forEach(task -> {
             if (task instanceof Quiz quiz) {
-                System.out.println("Quiz name: " + quiz.getName() + ", deadline: " + quiz.getFdate());
+                System.out.println("Quiz name: " + quiz.getName() + ", deadline: " + quiz.getFormattedStartDate());
                 autoCorrectQuiz(quiz);
             } else if (task instanceof Question question) {
                 System.out.println("Problem text: " + question.getQuestionText() + ", answer text: " + question.getAnswer() + ", deadline: " + question.getFormattedDate());
@@ -255,9 +255,9 @@ public class Teacher extends Person {
     }
 
     public void autoCorrectQuiz(Quiz quiz) {
-        System.out.println("Quiz text: " + quiz.getQuizTxt() + "\nAutocorrecting...");
+        System.out.println("Quiz text: " + quiz.getQuizText() + "\nAutocorrecting...");
         quiz.getStudentAnswers().forEach((student, answer) -> {
-            if (quiz.getQuizAns().equals(answer)) {
+            if (quiz.getQuizAnswer().equals(answer)) {
                 quiz.getStudentsScore().put(student.getEducationalID(), quiz.getScore());
             } else {
                 quiz.getStudentsScore().put(student.getEducationalID(), 0);
@@ -268,7 +268,7 @@ public class Teacher extends Person {
 
     public void autoCorrectQuestion(Question question) {
         System.out.println("Question text: " + question.getQuestionText() + "\nAutocorrecting...");
-        question.getStudentAnswer().forEach((String, answer) -> {
+        question.getStudentAnswers().forEach((String, answer) -> {
             if (question.getAnswer().equals(answer)) {
                 question.getStudentScores().put(String, 20);
             } else {

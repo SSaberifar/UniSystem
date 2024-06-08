@@ -6,18 +6,17 @@ import java.util.Scanner;
 public class Question extends Task {
     private String questionText;
     private String answer;
-    private final HashMap<String, String> studentAnswer = new HashMap<>();
+    private final HashMap<String, String> studentAnswers = new HashMap<>();
     private final HashMap<String, Integer> studentScores = new HashMap<>();
 
-    // Constructor
     public Question(String deadline, String questionText, String answer, String taskName, Unit unit, Teacher teacher) {
         super(deadline, taskName, teacher, unit);
         setQuestionText(questionText);
         setAnswer(answer);
     }
 
-    public HashMap<String, String> getStudentAnswer() {
-        return studentAnswer;
+    public HashMap<String, String> getStudentAnswers() {
+        return studentAnswers;
     }
 
     public HashMap<String, Integer> getStudentScores() {
@@ -26,33 +25,31 @@ public class Question extends Task {
 
     public void answerToQuestion(Student student, Scanner scanner) {
         System.out.println("Problem: " + questionText + " Enter your answer:");
-        String answer = scanner.nextLine(); // خطا از این خط حذف شده است
-        studentAnswer.put(student.getUsername(), answer);
+        String answer = scanner.nextLine();
+        studentAnswers.put(student.getUsername(), answer);
         System.out.println("Your answer has been saved successfully.");
     }
 
     public void setQuestionText(String text) {
-        while (text.isEmpty()) {
-            System.out.println("Text can't be empty! Please enter the text:");
-            text = new Scanner(System.in).nextLine(); // Temporary scanner to get input
+        if (text == null || text.isEmpty()) {
+            throw new IllegalArgumentException("Question text can't be empty!");
         }
         this.questionText = text;
     }
 
     public String getQuestionText() {
-        return this.questionText;
+        return questionText;
     }
 
     public void setAnswer(String answer) {
-        while (answer == null) {
-            System.out.println("Answer can't be empty! Please enter a valid answer:");
-            answer = new Scanner(System.in).nextLine();
+        if (answer == null || answer.isEmpty()) {
+            throw new IllegalArgumentException("Answer can't be empty!");
         }
         this.answer = answer;
     }
 
     public String getAnswer() {
-        return this.answer;
+        return answer;
     }
 
     public String getFormattedDate() {
@@ -62,13 +59,9 @@ public class Question extends Task {
 
     @Override
     public String toString() {
-        return "Question{\n" +
-                "question deadline=" + super.getDeadlineDate() + '\n' +
-                "question name=" + super.getName() + '\n' +
-                "question text=" + questionText + '\n' +
-                "question answer=" + answer + '\n' +
-                "student answer=" + studentAnswer + '\n' +
-                "student scores=" + studentScores + '\n' +
-                '}';
+        return String.format(
+                "Question{\nquestion deadline=%s\nquestion name=%s\nquestion text=%s\nquestion answer=%s\nstudent answers=%s\nstudent scores=%s\n}",
+                super.getDeadlineDate(), super.getName(), questionText, answer, studentAnswers, studentScores
+        );
     }
 }

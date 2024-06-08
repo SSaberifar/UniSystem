@@ -19,16 +19,8 @@ public abstract class Task {
         setTaskUnit(taskUnit);
     }
 
-    public Unit getTaskUnit() {
-        return taskUnit;
-    }
-
     public void setTaskUnit(Unit taskUnit) {
         this.taskUnit = taskUnit;
-    }
-
-    public Teacher getTaskTeacher() {
-        return taskTeacher;
     }
 
     public void setTaskTeacher(Teacher taskTeacher) {

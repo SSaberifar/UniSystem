@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 public abstract class Person {
 
     Scanner scanner = new Scanner(System.in);
-    List<Unit> units = new ArrayList<>(10);
+    List<Unit> units = new ArrayList<>();
     private String firstName;
     private String lastname;
     private String username;
@@ -161,7 +161,6 @@ public abstract class Person {
         return switch (role) {
             case "Student" -> Pattern.matches("^[0-9]{10}$", id);
             case "Teacher" -> Pattern.matches("^[0-9]{6}$", id);
-            case "Official" -> Pattern.matches("^[0-9]{4}$", id);
             default -> false;
         };
     }

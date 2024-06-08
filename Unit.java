@@ -1,22 +1,17 @@
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Unit {
 
-    private static final int MAX_STUDENTS = 10;
-    private static final int MAX_NOTIFICATIONS = 10;
-    private static final int MAX_TASKS = 20;
-
     private String unitName;
-    private List<Student> students = new ArrayList<>(MAX_STUDENTS);
-    private List<String> notifications = new ArrayList<>(MAX_NOTIFICATIONS);
-    private List<Task> tasks = new ArrayList<>(MAX_TASKS);
-    private int currentQuizIndex = 0;
+    private final List<Student> students = new ArrayList<>();
+    private final List<String> notifications = new ArrayList<>();
+    private final List<Task> tasks = new ArrayList<>();
     private Teacher teacher;
+    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private static final Scanner scanner = new Scanner(System.in);
 
     public Unit(String unitName, Teacher teacher) {
         setUnitName(unitName);
@@ -24,7 +19,6 @@ public class Unit {
     }
 
     public void addQuestion(String deadline, String taskName, String questionText, String answer) {
-        Scanner scanner = new Scanner(System.in);
         if (isValidQuestion(deadline, taskName, questionText, answer)) {
             tasks.add(new Question(deadline, questionText, answer, taskName, this, this.teacher));
             System.out.println("Question added. Do you want to add another question? (y/n)");
@@ -32,7 +26,7 @@ public class Unit {
                 promptForQuestionDetails();
             }
         } else {
-            System.out.println("Deadline and question name can't be empty. Do you want to try again? (y/n)");
+            System.out.println("Invalid input. Deadline, question name, text, and answer can't be empty. Do you want to try again? (y/n)");
             if (scanner.next().equalsIgnoreCase("y")) {
                 promptForQuestionDetails();
             }
@@ -44,20 +38,18 @@ public class Unit {
     }
 
     private void promptForQuestionDetails() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter date, then question name, text, and answer:");
-        addQuestion(scanner.next(), scanner.next(), scanner.nextLine(), scanner.nextLine());
+        System.out.println("Enter deadline (yyyy-MM-dd HH:mm), question name, text, and answer:");
+        addQuestion(scanner.nextLine(), scanner.nextLine(), scanner.nextLine(), scanner.nextLine());
     }
 
     public void addQuiz(String startDate, String quizTime, String deadline, String quizName, int score) {
-        Scanner scanner = new Scanner(System.in);
         if (isInvalidQuizDetails(startDate, quizTime, deadline, quizName)) {
-            System.out.println("Start/deadline date and quiz date/name can't be empty! Try again:");
-            addQuiz(scanner.next(), scanner.next(), scanner.next(), scanner.next(), scanner.nextInt());
+            System.out.println("Invalid input. Start date, quiz time, deadline, and quiz name can't be empty. Try again:");
+            addQuiz(scanner.nextLine(), scanner.nextLine(), scanner.nextLine(), scanner.nextLine(), Integer.parseInt(scanner.nextLine()));
         } else {
-            tasks.add(new Quiz(startDate, quizTime, deadline, quizName, this, this.teacher, score));
-            currentQuizIndex++;
-            addQuizQuestions(scanner);
+            Quiz quiz = new Quiz(startDate, quizTime, deadline, quizName, this, this.teacher, score);
+            tasks.add(quiz);
+            addQuizQuestions(quiz);
         }
     }
 
@@ -65,24 +57,21 @@ public class Unit {
         return startDate.isEmpty() || quizTime.isEmpty() || deadline.isEmpty() || quizName.isEmpty();
     }
 
-    private void addQuizQuestions(Scanner scanner) {
+    private void addQuizQuestions(Quiz quiz) {
         boolean repeat;
         do {
             repeat = false;
             System.out.println("Enter your questions and answers:");
-            if (tasks.get(currentQuizIndex) instanceof Quiz quizInstance) {
-                quizInstance.setProblemAnswers(scanner.next(), scanner.next());
-                System.out.println("Question and answer added successfully. Do you want to add another problem? (y/n)");
-                if (scanner.next().equalsIgnoreCase("y")) {
-                    repeat = true;
-                }
+            quiz.setProblemAnswers(scanner.nextLine(), scanner.nextLine());
+            System.out.println("Question and answer added successfully. Do you want to add another problem? (y/n)");
+            if (scanner.next().equalsIgnoreCase("y")) {
+                repeat = true;
             }
         } while (repeat);
     }
 
     public boolean isDeadlinePassed(String deadline) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        LocalDateTime finishTime = LocalDateTime.parse(deadline, formatter);
+        LocalDateTime finishTime = LocalDateTime.parse(deadline, DATE_FORMAT);
         Duration duration = Duration.between(LocalDateTime.now(), finishTime);
 
         if (finishTime.isAfter(LocalDateTime.now())) {
@@ -110,12 +99,8 @@ public class Unit {
     }
 
     public void addStudent(Student student) {
-        if (students.size() < MAX_STUDENTS) {
-            this.students.add(student);
-            student.units.add(this);
-        } else {
-            throw new IllegalStateException("Maximum number of students reached.");
-        }
+        this.students.add(student);
+        student.units.add(this);
     }
 
     public Teacher getTeacher() {
@@ -123,35 +108,26 @@ public class Unit {
     }
 
     private void setTeacher(Teacher teacher) {
-        if (teacher != null) {
-            this.teacher = teacher;
-        } else {
+        if (teacher == null) {
             throw new IllegalArgumentException("Teacher cannot be null!");
         }
+        this.teacher = teacher;
     }
 
     public List<Task> getTasks() {
         return tasks;
     }
 
-    public String getName() {
-        return unitName;
-    }
-
     public List<String> getNotifications() {
         return notifications;
     }
 
-    public String studentString() {
-        StringBuilder names = new StringBuilder();
-        for (Student student : this.students) {
-            names.append(student.getUsername()).append(",");
-        }
-        return names.toString();
+    public String getStudentsAsString() {
+        return String.join(", ", students.stream().map(Student::getUsername).toList());
     }
 
     @Override
     public String toString() {
-        return unitName + ":\n" + "teacher= " + teacher.getUsername() + "\n" + "Students= " + studentString();
+        return String.format("%s:%nteacher= %s%nStudents= %s", unitName, teacher.getUsername(), getStudentsAsString());
     }
 }

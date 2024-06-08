@@ -49,10 +49,10 @@ public class Student extends Person {
     }
 
     private void displayUnitTasks(Unit unit) {
-        System.out.println("Unit: " + unit.getName() + " tasks:");
+        System.out.println("Unit: " + unit.getUnitName() + " tasks:");
         for (Task task : unit.getTasks()) {
             if (task instanceof Quiz quiz) {
-                System.out.println("Quiz name: " + quiz.getName() + ", deadline: " + quiz.getFdate());
+                System.out.println("Quiz name: " + quiz.getName() + ", deadline: " + quiz.getFormattedStartDate());
             }
         }
         System.out.println("---------------------------");
@@ -71,7 +71,7 @@ public class Student extends Person {
             System.out.println("Enter unit name:");
             String unitName = scanner.next();
             for (Unit unit : units) {
-                if (unit.getName().equalsIgnoreCase(unitName)) {
+                if (unit.getUnitName().equalsIgnoreCase(unitName)) {
                     answerTask(unit);
                     break;
                 }
@@ -98,7 +98,7 @@ public class Student extends Person {
         System.out.println("Do you want to start answering? (y/n)");
         String accept = scanner.next();
         if (accept.equalsIgnoreCase("y")) {
-            if (task instanceof Quiz quiz && unit.isDeadlinePassed(quiz.getFdate())) {
+            if (task instanceof Quiz quiz && unit.isDeadlinePassed(quiz.getFormattedStartDate())) {
                 System.out.println("Quiz name: " + quiz.getName() + ", total time: " + quiz.getQuizTime());
                 quiz.answerToQuiz(this);
             } else if (task instanceof Question question && !unit.isDeadlinePassed(question.getFormattedDate())) {
