@@ -12,7 +12,6 @@ public abstract class Task {
     protected Teacher taskTeacher;
     protected Unit taskUnit;
 
-    // Constructor
     public Task(String deadline, String taskName, Teacher taskTeacher, Unit taskUnit) {
         setName(taskName);
         setDeadline(deadline);
@@ -20,8 +19,6 @@ public abstract class Task {
         setTaskUnit(taskUnit);
     }
 
-
-    // Getter and Setter for Task Unit
     public Unit getTaskUnit() {
         return taskUnit;
     }
@@ -30,7 +27,6 @@ public abstract class Task {
         this.taskUnit = taskUnit;
     }
 
-    // Getter and Setter for Task Teacher
     public Teacher getTaskTeacher() {
         return taskTeacher;
     }
@@ -39,7 +35,6 @@ public abstract class Task {
         this.taskTeacher = taskTeacher;
     }
 
-    // Setter for Deadline with Validation
     public void setDeadline(String deadline) {
         while (true) {
             if (deadline.isEmpty()) {
@@ -56,12 +51,10 @@ public abstract class Task {
         }
     }
 
-    // Getter for Deadline Date
     public Date getDeadlineDate() {
         return this.deadline;
     }
 
-    // Getter and Setter for Task Name with Validation
     public String getName() {
         return this.taskName;
     }

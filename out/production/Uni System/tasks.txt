@@ -1,0 +1,8 @@
+Ap: Question{
+question deadline=2024-08-08 10:30
+question name=capital
+question text=where is tehran?
+question answer=center of iran
+student answer={amiralif1384=center of iran}
+student scores={amiralif1384=20}
+}

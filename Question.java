@@ -6,7 +6,7 @@ import java.util.Scanner;
 public class Question extends Task {
     private String questionText;
     private String answer;
-    private final HashMap<Student, String> studentAnswer = new HashMap<>();
+    private final HashMap<String, String> studentAnswer = new HashMap<>();
     private final HashMap<String, Integer> studentScores = new HashMap<>();
 
     // Constructor
@@ -16,7 +16,7 @@ public class Question extends Task {
         setAnswer(answer);
     }
 
-    public HashMap<Student, String> getStudentAnswer() {
+    public HashMap<String, String> getStudentAnswer() {
         return studentAnswer;
     }
 
@@ -25,13 +25,12 @@ public class Question extends Task {
     }
 
     public void answerToQuestion(Student student, Scanner scanner) {
-        System.out.println("Problem: \n" + questionText + "\nEnter your answer: ");
-        String answer = scanner.nextLine();
-        studentAnswer.put(student, answer);
+        System.out.println("Problem: " + questionText + " Enter your answer:");
+        String answer = scanner.nextLine(); // خطا از این خط حذف شده است
+        studentAnswer.put(student.getUsername(), answer);
         System.out.println("Your answer has been saved successfully.");
     }
 
-    // Setter and Getter for questionText
     public void setQuestionText(String text) {
         while (text.isEmpty()) {
             System.out.println("Text can't be empty! Please enter the text:");
@@ -44,7 +43,6 @@ public class Question extends Task {
         return this.questionText;
     }
 
-    // Setter and Getter for answer
     public void setAnswer(String answer) {
         while (answer == null) {
             System.out.println("Answer can't be empty! Please enter a valid answer:");
@@ -64,11 +62,13 @@ public class Question extends Task {
 
     @Override
     public String toString() {
-        return "Question{" +
-                "questionText='" + questionText + '\'' +
-                ", answer='" + answer + '\'' +
-                ", studentAnswer=" + studentAnswer +
-                ", studentScores=" + studentScores +
+        return "Question{\n" +
+                "question deadline=" + super.getDeadlineDate() + '\n' +
+                "question name=" + super.getName() + '\n' +
+                "question text=" + questionText + '\n' +
+                "question answer=" + answer + '\n' +
+                "student answer=" + studentAnswer + '\n' +
+                "student scores=" + studentScores + '\n' +
                 '}';
     }
 }

@@ -9,8 +9,8 @@ public class FileManager {
     private static final String NOTIFICATIONS_FILE = "notifications.txt";
     private static final String TEACHERS_FILE = "teachers.txt";
     private static final String STUDENTS_FILE = "students.txt";
+    private static final String TASKS_FILE = "tasks.txt";
 
-    // Method to save teachers to file
     public static void saveTeachers(List<Teacher> teachers) throws IOException {
         BufferedWriter writer = new BufferedWriter(new FileWriter(TEACHERS_FILE));
         for (Teacher teacher : teachers) {
@@ -22,7 +22,6 @@ public class FileManager {
         writer.close();
     }
 
-    // Method to load teachers from file
     public static List<Teacher> loadTeachers() throws FileNotFoundException {
         List<Teacher> teachers = new ArrayList<>();
         Scanner scanner = new Scanner(new File(TEACHERS_FILE));
@@ -34,7 +33,6 @@ public class FileManager {
         return teachers;
     }
 
-    // Method to save students to file
     public static void saveStudents(List<Student> students) throws IOException {
         BufferedWriter writer = new BufferedWriter(new FileWriter(STUDENTS_FILE));
         for (Student student : students) {
@@ -46,7 +44,6 @@ public class FileManager {
         writer.close();
     }
 
-    // Method to load students from file
     public static List<Student> loadStudents() throws FileNotFoundException {
         List<Student> students = new ArrayList<>();
         Scanner scanner = new Scanner(new File(STUDENTS_FILE));
@@ -58,7 +55,6 @@ public class FileManager {
         return students;
     }
 
-    // Method to save classes to file
     public static void saveClasses(List<Unit> units) throws IOException {
         BufferedWriter writer = new BufferedWriter(new FileWriter(CLASSES_FILE));
         for (Unit unit : units) {
@@ -68,7 +64,6 @@ public class FileManager {
         writer.close();
     }
 
-    // Method to load classes from file
     public static List<Unit> loadClasses(Teacher teacher, List<Student> allStudents) throws FileNotFoundException {
         List<Unit> units = new ArrayList<>();
         Scanner scanner = new Scanner(new File(CLASSES_FILE));
@@ -76,7 +71,7 @@ public class FileManager {
         Unit unit = null;
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
-            if(line.contains(":")){
+            if (line.contains(":")) {
                 String[] data = line.split(":");
                 unitName = data[0];
                 unit = new Unit(unitName, teacher);
@@ -96,7 +91,6 @@ public class FileManager {
         return units;
     }
 
-
     private static Student findStudentByUsername(List<Student> students, String username) {
         for (Student student : students) {
             if (student.getUsername().equals(username)) {
@@ -106,8 +100,57 @@ public class FileManager {
         return null;
     }
 
+    public static void saveQuestions(List<Unit> units) throws IOException {
+        BufferedWriter writer = new BufferedWriter(new FileWriter(TASKS_FILE));
+        for (Unit unit : units) {
+            for (Task task : unit.getTasks()) {
+                if (task instanceof Question) {
+                    Question question = (Question) task;
+                    writer.write(unit.getUnitName() + ": " + question);
+                    writer.newLine();
+                }
+            }
+        }
+        writer.close();
+    }
 
-    // Method to save notifications to file
+    public static void loadQuestions(List<Unit> units) throws FileNotFoundException {
+        Scanner scanner = new Scanner(new File(TASKS_FILE));
+        String unitName = "";
+        String questionDead = "";
+        String questionName = "";
+        String questionText = "";
+        String questionAns = "";
+        while (scanner.hasNextLine()) {
+            String line = scanner.nextLine();
+            if (line.contains(": ")) {
+                String[] data = line.split(": ");
+                unitName = data[0];
+            }
+            if (line.contains("=")) {
+                if (line.split("=")[0].equals("question deadline")) {
+                    questionDead = line.split("=")[1];
+                }
+                if (line.split("=")[0].equals("question name")) {
+                    questionName = line.split("=")[1];
+                }
+                if (line.split("=")[0].equals("question text")) {
+                    questionText = line.split("=")[1];
+                }
+                if (line.split("=")[0].equals("question answer")) {
+                    questionAns = line.split("=")[1];
+                    for (Unit unit : units) {
+                        if (unit.getUnitName().equals(unitName)) {
+                            unit.getTasks().add(new Question(questionDead,questionText,questionAns,questionName,unit,unit.getTeacher()));
+                        }
+                    }
+                }
+            }
+
+        }
+        scanner.close();
+    }
+
     public static void saveNotifications(List<Unit> units) throws IOException {
         BufferedWriter writer = new BufferedWriter(new FileWriter(NOTIFICATIONS_FILE));
         for (Unit unit : units) {
@@ -117,7 +160,6 @@ public class FileManager {
         writer.close();
     }
 
-    // Method to load notifications from file
     public static void loadNotifications(List<Unit> units) throws FileNotFoundException {
         Scanner scanner = new Scanner(new File(NOTIFICATIONS_FILE));
         while (scanner.hasNextLine()) {

@@ -18,8 +18,9 @@ public class Main {
             teachers = FileManager.loadTeachers();
             students = FileManager.loadStudents();
             for (Teacher teacher : teachers) {
-                teacher.units = FileManager.loadClasses(teacher,students);
+                teacher.units = FileManager.loadClasses(teacher, students);
                 FileManager.loadNotifications(teacher.units);
+                FileManager.loadQuestions(teacher.units);
             }
         } catch (FileNotFoundException e) {
             System.out.println("Data files not found, starting with empty lists.");
@@ -33,6 +34,7 @@ public class Main {
             for (Teacher teacher : teachers) {
                 FileManager.saveClasses(teacher.units);
                 FileManager.saveNotifications(teacher.units);
+                FileManager.saveQuestions(teacher.units);
             }
         } catch (IOException e) {
             System.out.println("Error saving data: " + e.getMessage());

@@ -23,7 +23,6 @@ public class Unit {
         setTeacher(teacher);
     }
 
-    // Methods
     public void addQuestion(String deadline, String taskName, String questionText, String answer) {
         Scanner scanner = new Scanner(System.in);
         if (isValidQuestion(deadline, taskName, questionText, answer)) {
@@ -143,9 +142,9 @@ public class Unit {
         return notifications;
     }
 
-    public String studentString(){
+    public String studentString() {
         StringBuilder names = new StringBuilder();
-        for(Student student:this.students){
+        for (Student student : this.students) {
             names.append(student.getUsername()).append(",");
         }
         return names.toString();

@@ -58,7 +58,7 @@ public class Student extends Person {
         System.out.println("---------------------------");
         for (Task task : unit.getTasks()) {
             if (task instanceof Question question) {
-                System.out.println("Problem text: " + question.getQuestionText() + ", deadline: " + question.getFormattedDate());
+                System.out.println("Question name: " + question.getName() + ", deadline: " + question.getFormattedDate());
             }
         }
         System.out.println("---------------------------");
@@ -101,14 +101,12 @@ public class Student extends Person {
             if (task instanceof Quiz quiz && unit.isDeadlinePassed(quiz.getFdate())) {
                 System.out.println("Quiz name: " + quiz.getName() + ", total time: " + quiz.getQuizTime());
                 quiz.answerToQuiz(this);
-            } else if (task instanceof Question question && unit.isDeadlinePassed(question.getFormattedDate())) {
+            } else if (task instanceof Question question && !unit.isDeadlinePassed(question.getFormattedDate())) {
                 System.out.println("Question name: " + question.getName() + ", deadline: " + question.getFormattedDate());
-                question.answerToQuestion(this, new Scanner(scanner.nextLine()));
+                question.answerToQuestion(this, new Scanner(System.in));
             }
-            selectMenu();
-        } else {
-            selectMenu();
         }
+        selectMenu();
     }
 
     @Override

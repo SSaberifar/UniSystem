@@ -5,7 +5,6 @@ public class Teacher extends Person {
         super(firstName, lastName, username, email, phoneNumber, role, pass, educationalID);
     }
 
-    // Methods
     public void addQuestion(String deadline, String taskName, String questionText, String answer, Unit unit) {
         Scanner scanner = new Scanner(System.in);
         unit.getTasks().add(new Question(deadline, questionText, answer, taskName, unit, this));
@@ -14,7 +13,6 @@ public class Teacher extends Person {
             System.out.println("Enter date, then question name, text, and answer:");
             addQuestion(scanner.next(), scanner.next(), scanner.nextLine(), scanner.nextLine(), unit);
         }
-        Main.printMenu();
     }
 
     public void addQuiz() {
@@ -270,11 +268,11 @@ public class Teacher extends Person {
 
     public void autoCorrectQuestion(Question question) {
         System.out.println("Question text: " + question.getQuestionText() + "\nAutocorrecting...");
-        question.getStudentAnswer().forEach((student, answer) -> {
+        question.getStudentAnswer().forEach((String, answer) -> {
             if (question.getAnswer().equals(answer)) {
-                question.getStudentScores().put(student.getEducationalID(), 20);
+                question.getStudentScores().put(String, 20);
             } else {
-                question.getStudentScores().put(student.getEducationalID(), 0);
+                question.getStudentScores().put(String, 0);
             }
         });
         System.out.println("Autocorrecting finished. Students' scores saved.");
