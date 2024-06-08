@@ -7,7 +7,8 @@ public abstract class Task {
     protected static final Scanner scanner = new Scanner(System.in);
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
-    protected Date deadline;
+    protected String deadline;
+    protected Date deadline2;
     protected String taskName;
     protected Teacher taskTeacher;
     protected Unit taskUnit;
@@ -35,7 +36,8 @@ public abstract class Task {
                 continue;
             }
             try {
-                this.deadline = DATE_FORMAT.parse(deadline);
+                this.deadline = deadline;
+                this.deadline2 = DATE_FORMAT.parse(deadline);
             } catch (ParseException e) {
                 throw new RuntimeException(e);
             }
@@ -44,6 +46,9 @@ public abstract class Task {
     }
 
     public Date getDeadlineDate() {
+        return this.deadline2;
+    }
+    public String getDeadline(){
         return this.deadline;
     }
 
@@ -62,7 +67,7 @@ public abstract class Task {
     @Override
     public String toString() {
         return "Task{" +
-                "deadline=" + deadline +
+                "deadline=" + deadline2 +
                 ", taskName='" + taskName + '\'' +
                 ", taskTeacher=" + taskTeacher +
                 ", taskUnit=" + taskUnit +

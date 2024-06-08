@@ -61,7 +61,7 @@ public class Question extends Task {
     public String toString() {
         return String.format(
                 "Question{\nquestion deadline=%s\nquestion name=%s\nquestion text=%s\nquestion answer=%s\nstudent answers=%s\nstudent scores=%s\n}",
-                super.getDeadlineDate(), super.getName(), questionText, answer, studentAnswers, studentScores
+                super.getDeadline(), super.getName(), questionText, answer, studentAnswers, studentScores
         );
     }
 }
